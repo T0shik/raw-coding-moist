@@ -3,6 +3,6 @@
 namespace Moist.Core {
     public interface IShopManager
     {
-        Task<T> GetSchema<T>(int i);
+        Task<T> GetSchema<T>(int shopId);
     }
 }

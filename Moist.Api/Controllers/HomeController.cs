@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Moist.Api.Controllers
+namespace Moist.Application.Api.Controllers
 {
     public class HomeController : Controller
     {

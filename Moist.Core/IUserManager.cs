@@ -4,6 +4,8 @@ using Moist.Core.Models;
 namespace Moist.Core {
     public interface IUserManager
     {
-        Task<SchemaProgress> GetProgressAsync(string customer, in int progressId);
+        Task<SchemaProgress> GetProgressAsync(string customerId, int progressId);
+        Task<bool> InSchemaAsync(string customerId, int schemaId);
+        Task<SchemaProgress> CreateSchemaProgressAsync(string customerId, int schemaId);
     }
 }

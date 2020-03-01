@@ -2,12 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-        <AssemblyName>Moist.Application.Api</AssemblyName>
-        <RootNamespace>Moist.Application.Api</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Moist.Application\Moist.Application.csproj" />
+      <ProjectReference Include="..\Moist.Configuration\Moist.Configuration.csproj" />
       <ProjectReference Include="..\Moist.Database\Moist.Database.csproj" />
     </ItemGroup>
 

@@ -5,6 +5,6 @@ namespace Moist.Core.Code {
     {
         Task<string> CreateRedemptionCode();
         Task<RedemptionValidationResult> ValidateRedemptionCode(int shopId, string code);
-        Task<bool> ValidateCode(int shopId, string code);
+        Task<ValidationResult> ValidateRewardCode(int shopId, string code);
     }
 }

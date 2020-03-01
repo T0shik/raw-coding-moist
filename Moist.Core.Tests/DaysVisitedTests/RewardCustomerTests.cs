@@ -46,7 +46,7 @@ namespace Moist.Core.Tests.DaysVisitedTests
             _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaConfiguration>(1)).ReturnsAsync(Config);
             _userMock.Setup(x => x.GetProgressAsync("customer", 1))
                      .ReturnsAsync(progress);
-            _codeMock.Setup(x => x.ValidateCode(1, "code")).ReturnsAsync(true);
+            _codeMock.Setup(x => x.ValidateRewardCode(1, "code")).ReturnsAsync(new ValidationResult { Success = true});
 
             var success = await _context.Reward("customer", 1, "code");
 
@@ -81,7 +81,7 @@ namespace Moist.Core.Tests.DaysVisitedTests
         {
             _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaConfiguration>(1)).ReturnsAsync(Config);
             _userMock.Setup(x => x.GetProgressAsync("customer", 1)).ReturnsAsync(Progress);
-            _codeMock.Setup(x => x.ValidateCode(1, "code")).ReturnsAsync(false);
+            _codeMock.Setup(x => x.ValidateRewardCode(1, "code")).ReturnsAsync(new ValidationResult { Success = false});
 
             return ThrowsAsync<Exception>(() => _context.Reward("customer", 1, "code"));
         }

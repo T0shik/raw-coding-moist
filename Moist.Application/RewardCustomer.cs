@@ -36,7 +36,8 @@ namespace Moist.Application
                 throw new Exception();
             }
 
-            if (!await _codeGenerator.ValidateCode(config.ShopId, code))
+            var result = await _codeGenerator.ValidateRewardCode(config.ShopId, code); 
+            if (!result.Success)
             {
                 throw new Exception();
             }

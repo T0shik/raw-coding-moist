@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moist.Core.Models;
 
-namespace Moist.Api.Controllers
+namespace Moist.Application.Api.Controllers
 {
     [Route("/shop")]
     public class ShopController : Controller
