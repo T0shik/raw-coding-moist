@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Moist.Core;
+using Moist.Core.Code;
 using Moist.Core.Models;
 
-namespace Moist.Core
+namespace Moist.Application
 {
-    public class DaysVisitedSchema
+    public class InitiateRedemption
     {
         private readonly IUserManager _userManager;
         private readonly IShopManager _shopManager;
         private readonly ICodeGenerator _codeGenerator;
         private readonly IDateTime _dateTime;
 
-        public DaysVisitedSchema(
+        public InitiateRedemption(
             IUserManager userManager,
             IShopManager shopManager,
             ICodeGenerator codeGenerator,
@@ -23,14 +25,7 @@ namespace Moist.Core
             _dateTime = dateTime;
         }
 
-        public void Reward()
-        {
-            Counter++;
-        }
-
-        public int Counter { get; set; }
-
-        public async Task<string> InitiateRedemption(string customer, int progressId)
+        public async Task<string> Redeem(string customer, int progressId)
         {
             var progress = await _userManager.GetProgressAsync(customer, progressId);
 
@@ -41,22 +36,12 @@ namespace Moist.Core
                 throw new Exception();
             }
 
-            if (!config.Perpetual)
+            if (!config.Active(_dateTime))
             {
-                var now = _dateTime.Now;
-                if (now < config.ValidSince
-                    || now > config.ValidUntil)
-                {
-                    throw new Exception();
-                }
+                throw new Exception();
             }
 
             return await _codeGenerator.CreateRedemptionCode();
-        }
-
-        public Task<bool> CompleteRedemption(string code)
-        {
-            return _codeGenerator.ValidateCode(code);
         }
     }
 }

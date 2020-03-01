@@ -1,20 +1,21 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Moist.Core.Exceptions;
+using Moist.Application;
+using Moist.Core.Code;
 using Moist.Core.Models;
 using Moq;
 using Xunit;
 
-namespace Moist.Core.Tests
+namespace Moist.Core.Tests.DaysVisitedTests
 {
-    public class DaysVisitedSchemaTests
+    public class InitiateRedemptionTests
     {
         private readonly Mock<ICodeGenerator> _codeMock = new Mock<ICodeGenerator>();
         private readonly Mock<IUserManager> _userMock = new Mock<IUserManager>();
         private readonly Mock<IShopManager> _shopMock = new Mock<IShopManager>();
         private readonly Mock<IDateTime> _dateMock = new Mock<IDateTime>();
-        private readonly DaysVisitedSchema _schema;
+        private readonly InitiateRedemption _context;
 
         private static SchemaProgress Progress =>
             new SchemaProgress
@@ -30,20 +31,12 @@ namespace Moist.Core.Tests
                 Goal = 6,
                 Perpetual = true
             };
-
-        public DaysVisitedSchemaTests()
+        
+        public InitiateRedemptionTests()
         {
-            _schema = new DaysVisitedSchema(_userMock.Object, _shopMock.Object, _codeMock.Object, _dateMock.Object);
+            _context = new InitiateRedemption(_userMock.Object, _shopMock.Object, _codeMock.Object, _dateMock.Object);
         }
-
-        [Fact]
-        public void Reward_IncrementsCounterBy1()
-        {
-            _schema.Reward();
-
-            Assert.Equal(1, _schema.Counter);
-        }
-
+        
         [Fact]
         public async Task InitiateRedemption_ReturnsUniqueCode()
         {
@@ -52,32 +45,12 @@ namespace Moist.Core.Tests
             _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaConfiguration>(1)).ReturnsAsync(Config);
             _codeMock.Setup(x => x.CreateRedemptionCode()).ReturnsAsync(code);
 
-            var generatedCode = await _schema.InitiateRedemption("customer", 1);
+            var generatedCode = await _context.Redeem("customer", 1);
 
             Assert.Equal(code, generatedCode);
         }
-
-        [Fact]
-        public Task CompleteRedemption_ThrowsWhenCodeInvalid()
-        {
-            var code = Guid.NewGuid().ToString();
-            _codeMock.Setup(x => x.ValidateCode(code)).Throws<InvalidRedemptionCode>();
-
-            return Assert.ThrowsAsync<InvalidRedemptionCode>(() => _schema.CompleteRedemption(code));
-        }
-
-        [Fact]
-        public async Task CompleteRedemption_ReturnsTrueWhenCodeIsValid()
-        {
-            var code = Guid.NewGuid().ToString();
-            _codeMock.Setup(x => x.ValidateCode(code)).ReturnsAsync(true);
-
-            var result = await _schema.CompleteRedemption(code);
-
-            Assert.True(result);
-        }
-
-        [Fact]
+        
+          [Fact]
         public Task InitiateRedemption_ThrowsWhenRequirementsNoMet()
         {
             var progress = Progress;
@@ -85,7 +58,7 @@ namespace Moist.Core.Tests
             _userMock.Setup(x => x.GetProgressAsync("customer", 1)).ReturnsAsync(progress);
             _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaConfiguration>(1)).ReturnsAsync(Config);
 
-            return Assert.ThrowsAsync<Exception>(() => _schema.InitiateRedemption("customer", 1));
+            return Assert.ThrowsAsync<Exception>(() => _context.Redeem("customer", 1));
         }
 
         [Fact]
@@ -98,7 +71,7 @@ namespace Moist.Core.Tests
             _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaConfiguration>(1)).ReturnsAsync(config);
             _codeMock.Setup(x => x.CreateRedemptionCode()).ReturnsAsync(code);
 
-            var result = await _schema.InitiateRedemption("customer", 1);
+            var result = await _context.Redeem("customer", 1);
 
             Assert.Equal(code, result);
         }
@@ -124,7 +97,7 @@ namespace Moist.Core.Tests
             _codeMock.Setup(x => x.CreateRedemptionCode()).ReturnsAsync(code);
             _dateMock.Setup(x => x.Now).Returns(currentTime);
 
-            return Assert.ThrowsAsync<Exception>(() => _schema.InitiateRedemption("customer", 1));
+            return Assert.ThrowsAsync<Exception>(() => _context.Redeem("customer", 1));
         }
     }
 }

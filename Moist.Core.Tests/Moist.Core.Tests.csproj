@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Moist.Core\Moist.Core.csproj" />
+      <ProjectReference Include="..\Moist.Application\Moist.Application.csproj" />
     </ItemGroup>
 
 </Project>
