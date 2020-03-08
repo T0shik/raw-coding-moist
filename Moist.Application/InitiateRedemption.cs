@@ -9,18 +9,18 @@ namespace Moist.Application
     public class InitiateRedemption
     {
         private readonly IUserManager _userManager;
-        private readonly IShopManager _shopManager;
+        private readonly IShopStore _shopStore;
         private readonly ICodeGenerator _codeGenerator;
         private readonly IDateTime _dateTime;
 
         public InitiateRedemption(
             IUserManager userManager,
-            IShopManager shopManager,
+            IShopStore shopStore,
             ICodeGenerator codeGenerator,
             IDateTime dateTime)
         {
             _userManager = userManager;
-            _shopManager = shopManager;
+            _shopStore = shopStore;
             _codeGenerator = codeGenerator;
             _dateTime = dateTime;
         }
@@ -29,7 +29,7 @@ namespace Moist.Application
         {
             var progress = await _userManager.GetProgressAsync(customer, progressId);
 
-            var config = await _shopManager.GetSchema<DaysVisitedSchemaConfiguration>(progress.SchemaId);
+            var config = await _shopStore.GetSchema<DaysVisitedSchemaSchema>(progress.SchemaId);
 
             if (progress.Progress < config.Goal)
             {

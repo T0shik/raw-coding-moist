@@ -13,7 +13,7 @@ namespace Moist.Core.Tests.DaysVisitedTests
     {
         private readonly Mock<ICodeGenerator> _codeMock = new Mock<ICodeGenerator>();
         private readonly Mock<IUserManager> _userMock = new Mock<IUserManager>();
-        private readonly Mock<IShopManager> _shopMock = new Mock<IShopManager>();
+        private readonly Mock<IShopStore> _shopMock = new Mock<IShopStore>();
         private readonly Mock<IDateTime> _dateMock = new Mock<IDateTime>();
         private readonly InitiateRedemption _context;
 
@@ -25,8 +25,8 @@ namespace Moist.Core.Tests.DaysVisitedTests
                 Progress = 6
             };
 
-        private static DaysVisitedSchemaConfiguration Config =>
-            new DaysVisitedSchemaConfiguration
+        private static DaysVisitedSchemaSchema Config =>
+            new DaysVisitedSchemaSchema
             {
                 Goal = 6,
                 Perpetual = true
@@ -42,7 +42,7 @@ namespace Moist.Core.Tests.DaysVisitedTests
         {
             var code = Guid.NewGuid().ToString();
             _userMock.Setup(x => x.GetProgressAsync("customer", 1)).ReturnsAsync(Progress);
-            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaConfiguration>(1)).ReturnsAsync(Config);
+            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaSchema>(1)).ReturnsAsync(Config);
             _codeMock.Setup(x => x.CreateRedemptionCode()).ReturnsAsync(code);
 
             var generatedCode = await _context.Redeem("customer", 1);
@@ -56,7 +56,7 @@ namespace Moist.Core.Tests.DaysVisitedTests
             var progress = Progress;
             progress.Progress = 5;
             _userMock.Setup(x => x.GetProgressAsync("customer", 1)).ReturnsAsync(progress);
-            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaConfiguration>(1)).ReturnsAsync(Config);
+            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaSchema>(1)).ReturnsAsync(Config);
 
             return Assert.ThrowsAsync<Exception>(() => _context.Redeem("customer", 1));
         }
@@ -68,7 +68,7 @@ namespace Moist.Core.Tests.DaysVisitedTests
             config.Perpetual = true;
             var code = Guid.NewGuid().ToString();
             _userMock.Setup(x => x.GetProgressAsync("customer", 1)).ReturnsAsync(Progress);
-            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaConfiguration>(1)).ReturnsAsync(config);
+            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaSchema>(1)).ReturnsAsync(config);
             _codeMock.Setup(x => x.CreateRedemptionCode()).ReturnsAsync(code);
 
             var result = await _context.Redeem("customer", 1);
@@ -93,7 +93,7 @@ namespace Moist.Core.Tests.DaysVisitedTests
             config.ValidUntil = new DateTime(2010, 1, 2, 6, 0, 0);
             var code = Guid.NewGuid().ToString();
             _userMock.Setup(x => x.GetProgressAsync("customer", 1)).ReturnsAsync(Progress);
-            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaConfiguration>(1)).ReturnsAsync(config);
+            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaSchema>(1)).ReturnsAsync(config);
             _codeMock.Setup(x => x.CreateRedemptionCode()).ReturnsAsync(code);
             _dateMock.Setup(x => x.Now).Returns(currentTime);
 

@@ -8,18 +8,18 @@ namespace Moist.Application
 {
     public class CompleteRedemption
     {
-        private readonly IShopManager _shopManager;
+        private readonly IShopStore _shopStore;
         private readonly IUserManager _userManager;
         private readonly ICodeGenerator _codeGenerator;
         private readonly IDateTime _dateTime;
 
         public CompleteRedemption(
-            IShopManager shopManager,
+            IShopStore shopStore,
             IUserManager userManager,
             ICodeGenerator codeGenerator,
             IDateTime dateTime)
         {
-            _shopManager = shopManager;
+            _shopStore = shopStore;
             _userManager = userManager;
             _codeGenerator = codeGenerator;
             _dateTime = dateTime;

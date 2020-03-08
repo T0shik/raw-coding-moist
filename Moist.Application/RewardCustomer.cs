@@ -8,18 +8,18 @@ namespace Moist.Application
 {
     public class RewardCustomer
     {
-        private readonly IShopManager _shopManager;
+        private readonly IShopStore _shopStore;
         private readonly IUserManager _userManager;
         private readonly ICodeGenerator _codeGenerator;
         private readonly IDateTime _dateTime;
 
         public RewardCustomer(
-            IShopManager shopManager,
+            IShopStore shopStore,
             IUserManager userManager,
             ICodeGenerator codeGenerator,
             IDateTime dateTime)
         {
-            _shopManager = shopManager;
+            _shopStore = shopStore;
             _userManager = userManager;
             _codeGenerator = codeGenerator;
             _dateTime = dateTime;
@@ -29,7 +29,7 @@ namespace Moist.Application
         {
             var progress = await _userManager.GetProgressAsync(customerId, progressId);
 
-            var config = await _shopManager.GetSchema<DaysVisitedSchemaConfiguration>(progress.SchemaId);
+            var config = await _shopStore.GetSchema<DaysVisitedSchemaSchema>(progress.SchemaId);
 
             if (!config.Active(_dateTime))
             {

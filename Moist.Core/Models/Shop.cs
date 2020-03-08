@@ -8,7 +8,7 @@ namespace Moist.Core.Models
         public string Name { get; set; }
         public string Description { get; set; }
         
-        public ICollection<DaysVisitedSchemaConfiguration> DaysVisitedSchemas { get; set; }
+        public ICollection<DaysVisitedSchemaSchema> DaysVisitedSchemas { get; set; }
         
         // todo: list of employees
         

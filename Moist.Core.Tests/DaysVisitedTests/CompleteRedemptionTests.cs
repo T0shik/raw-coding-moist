@@ -14,7 +14,7 @@ namespace Moist.Core.Tests.DaysVisitedTests
     {
         private readonly Mock<ICodeGenerator> _codeMock = new Mock<ICodeGenerator>();
         private readonly Mock<IUserManager> _userMock = new Mock<IUserManager>();
-        private readonly Mock<IShopManager> _shopMock = new Mock<IShopManager>();
+        private readonly Mock<IShopStore> _shopMock = new Mock<IShopStore>();
         private readonly Mock<IDateTime> _dateMock = new Mock<IDateTime>();
         private readonly CompleteRedemption _context;
 
