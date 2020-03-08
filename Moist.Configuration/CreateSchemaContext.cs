@@ -5,11 +5,11 @@ using Moist.Core.Models;
 
 namespace Moist.Configuration
 {
-    public class CreateSchema
+    public class CreateSchemaContext
     {
         private readonly IShopStore _shopStore;
 
-        public CreateSchema(IShopStore shopStore)
+        public CreateSchemaContext(IShopStore shopStore)
         {
             _shopStore = shopStore;
         }

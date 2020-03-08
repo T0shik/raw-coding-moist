@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Moist.Configuration.Forms;
 using Moist.Core;
 using Moist.Core.Models;
 using Moq;
@@ -12,17 +11,17 @@ namespace Moist.Configuration.Tests
     public class CreateSchemaTests
     {
         private readonly Mock<IShopStore> _shopMock = new Mock<IShopStore>();
-        private readonly CreateSchema _command;
+        private readonly CreateSchemaContext _command;
 
         public CreateSchemaTests()
         {
-            _command = new CreateSchema(_shopMock.Object);
+            _command = new CreateSchemaContext(_shopMock.Object);
         }
 
         [Fact]
         public async Task SavesDaysVisitedSchema()
         {
-            var form = new CreateSchema.Form
+            var form = new CreateSchemaContext.Form
             {
                 Type = SchemaType.DaysVisited,
             };

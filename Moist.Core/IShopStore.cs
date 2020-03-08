@@ -2,6 +2,7 @@
 using Moist.Core.Models;
 
 namespace Moist.Core {
+    //todo write implementations for this!
     public interface IShopStore
     {
         Task<T> GetSchema<T>(int schemaId);

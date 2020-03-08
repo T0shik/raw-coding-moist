@@ -54,7 +54,8 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="ChangeShopProfileContext.cs" t="Include" />
         <e p="CloseSchemaContext.cs" t="Include" />
-        <e p="CreateSchema.cs" t="Include" />
+        <e p="CreateSchemaContext.cs" t="Include" />
+        <e p="InitialiseShopContext.cs" t="Include" />
         <e p="Moist.Configuration.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
@@ -81,6 +82,7 @@
             </e>
           </e>
         </e>
+        <e p="RegisterEmployeeTests.cs" t="Include" />
       </e>
       <e p="Moist.Configuration.UI" t="IncludeRecursive">
         <e p="appsettings.Development.json" t="Include" />

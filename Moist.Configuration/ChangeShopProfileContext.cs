@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Moist.Core;
 
-namespace Moist.Configuration.Tests {
+namespace Moist.Configuration {
     public class ChangeShopProfileContext
     {
         private readonly IShopStore _shopStore;

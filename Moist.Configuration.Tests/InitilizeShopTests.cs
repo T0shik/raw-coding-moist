@@ -22,19 +22,4 @@ namespace Moist.Configuration.Tests
             Assert.True(result);
         }
     }
-
-    public class InitialiseShopContext
-    {
-        private readonly IShopStore _shopStore;
-
-        public InitialiseShopContext(IShopStore shopStore)
-        {
-            _shopStore = shopStore;
-        }
-
-        public Task<bool> Initialise(string userId)
-        {
-            return _shopStore.CreateShopForUser(userId);
-        }
-    }
 }

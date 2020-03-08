@@ -55,17 +55,4 @@ namespace Moist.Configuration.Tests
             Equal(NewForm.Description, mock.Description);
         }
     }
-
-    public interface IWriter<in TRequest, TResponse>
-    {
-        Task<TResponse> Do(TRequest stuff);
-    }
-
-    public class ChangeShopProfile : ChangeShopProfileContext, IWriter<ChangeShopProfileContext.Form, bool>
-    {
-        public ChangeShopProfile(IShopStore shopStore)
-            : base(shopStore) { }
-
-        public Task<bool> Do(Form stuff) => Change(stuff);
-    }
 }

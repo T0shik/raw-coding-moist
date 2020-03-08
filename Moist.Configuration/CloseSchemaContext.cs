@@ -2,7 +2,7 @@
 using Moist.Core;
 using Moist.Core.Models;
 
-namespace Moist.Configuration.Forms {
+namespace Moist.Configuration {
     public class CloseSchemaContext
     {
         private readonly IShopStore _shopStore;
