@@ -11,8 +11,8 @@
     <e p="C:\Users\Toshik\.Rider2019.3\config\extensions" t="IncludeRecursive" />
     <e p="C:\Users\Toshik\.Rider2019.3\config\scratches" t="IncludeRecursive" />
     <e p="C:\Users\Toshik\.Rider2019.3\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Toshik\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_RenameMe.-1528819948.00" t="ExcludeRecursive" />
-    <e p="D:\WS\Rider\RenameMe" t="IncludeFlat">
+    <e p="C:\Users\Toshik\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_Moist.-476835540.00" t="ExcludeRecursive" />
+    <e p="D:\WS\Rider\Moist" t="IncludeFlat">
       <e p="Moist.Api" t="IncludeRecursive">
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
@@ -93,7 +93,38 @@
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
               <e p="Moist.Configuration.UI.AssemblyInfo.cs" t="Include" />
+              <e p="Moist.Configuration.UI.RazorAssemblyInfo.cs" t="Include" />
             </e>
+          </e>
+        </e>
+        <e p="Pages" t="Include">
+          <e p="_ViewImports.cshtml" t="Include" />
+          <e p="_ViewStart.cshtml" t="Include" />
+          <e p="Account" t="Include">
+            <e p="Login" t="Include" />
+            <e p="Register" t="Include">
+              <e p="Index.cshtml" t="Include" />
+              <e p="Index.cshtml.cs" t="Include" />
+              <e p="RegisterForm.cs" t="Include" />
+            </e>
+          </e>
+          <e p="BasePage.cs" t="Include" />
+          <e p="Panel" t="Include">
+            <e p="_PanelLayout.cshtml" t="Include" />
+            <e p="_ViewStart.cshtml" t="Include" />
+            <e p="Main" t="Include">
+              <e p="Index.cshtml" t="Include" />
+              <e p="Index.cshtml.cs" t="Include" />
+              <e p="ShopInformation.cs" t="Include" />
+            </e>
+            <e p="StoreProfile" t="Include">
+              <e p="Index.cshtml" t="Include" />
+              <e p="Index.cshtml.cs" t="Include" />
+              <e p="MessageType.cs" t="Include" />
+            </e>
+          </e>
+          <e p="Shared" t="Include">
+            <e p="_Layout.cshtml" t="Include" />
           </e>
         </e>
         <e p="Program.cs" t="Include" />
@@ -114,11 +145,13 @@
         </e>
         <e p="IDateTime.cs" t="Include" />
         <e p="IShopStore.cs" t="Include" />
+        <e p="IStore.cs" t="Include" />
         <e p="IUserManager.cs" t="Include" />
         <e p="Models" t="Include">
           <e p="BaseSchema.cs" t="Include" />
           <e p="Customer.cs" t="Include" />
           <e p="DaysVisitedSchema.cs" t="Include" />
+          <e p="Employee.cs" t="Include" />
           <e p="SchemaProgress.cs" t="Include" />
           <e p="Shop.cs" t="Include" />
         </e>
@@ -131,6 +164,7 @@
           </e>
         </e>
         <e p="SchemaType.cs" t="Include" />
+        <e p="ShopAccessScopes.cs" t="Include" />
       </e>
       <e p="Moist.Core.Tests" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
@@ -150,6 +184,8 @@
         </e>
       </e>
       <e p="Moist.Database" t="IncludeRecursive">
+        <e p="AppDbContext.cs" t="Include" />
+        <e p="ApplicationUser.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="Moist.Database.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
@@ -159,9 +195,13 @@
             </e>
           </e>
         </e>
+        <e p="Stores" t="Include">
+          <e p="BaseStore.cs" t="Include" />
+          <e p="ShopStore.cs" t="Include" />
+        </e>
       </e>
+      <e p="Moist.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />
-      <e p="RenameMe.sln" t="IncludeFlat" />
       <e p="src" t="Include">
         <e p="api" t="Include">
           <e p="tests" t="Include" />

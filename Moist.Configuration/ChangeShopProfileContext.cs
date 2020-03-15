@@ -30,6 +30,8 @@ namespace Moist.Configuration {
 
             profile.Name = form.Name;
             profile.Description = form.Description;
+
+            await _shopStore.Save();
             
             return true;
         }
