@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Moist.Core.Models;
+using Moist.Core.Schemas;
 
 namespace Moist.Core
 {
-    //todo write implementations for this!
     public interface IShopStore : IStore
     {
-        Task<T> GetSchema<T>(int schemaId);
-        Task<bool> SaveDaysVisitedSchema(DaysVisitedSchemaSchema form);
+        Task<int> GetUsersShopId(string userId);
+        Task<Schema> GetSchema(int schemaId);
+        Task<List<Schema>> GetSchemas(string userId);
+        Task<bool> SaveSchema(Schema schema);
         Task<bool> CreateShopForUser(string userId);
         Task<Shop> GetProfile(int shopId);
         Task<T> GetProfile<T>(string userId, Expression<Func<Shop, T>> selector);

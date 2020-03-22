@@ -13,7 +13,7 @@ namespace Moist.Core.Models
         public string Name { get; set; }
         public string Description { get; set; }
         
-        public ICollection<DaysVisitedSchemaSchema> DaysVisitedSchemas { get; set; }
+        public ICollection<Schema> Schemas { get; set; }
         public ICollection<Employee> Employees { get; set; }
 
         // todo: list of employees

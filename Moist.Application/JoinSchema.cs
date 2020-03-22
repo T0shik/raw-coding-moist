@@ -21,12 +21,12 @@ namespace Moist.Application {
 
         public async Task<SchemaProgress> Join(string customerId, int schemaId)
         {
-            var schema = await _shopStore.GetSchema<DaysVisitedSchemaSchema>(schemaId);
-
-            if (!schema.Active(_dateTime))
-            {
-                throw new Exception();
-            }
+            var schema = await _shopStore.GetSchema(schemaId);
+            //
+            // if (!schema.Active(_dateTime))
+            // {
+            //     throw new Exception();
+            // }
 
             if (await _userManager.InSchemaAsync(customerId, schemaId))
             {

@@ -10,6 +10,7 @@ namespace Moist.Database
             : base(options) { }
 
         public DbSet<Shop> Shops { get; set; }
+        public DbSet<Schema> Schemas { get; set; }
         public DbSet<Employee> Employees { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

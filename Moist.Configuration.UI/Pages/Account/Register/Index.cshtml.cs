@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Hosting;
+using Moist.Configuration.UI.ViewModels.Panel;
 using Moist.Database;
 
 namespace Moist.Configuration.UI.Pages.Account.Register
@@ -64,7 +65,7 @@ namespace Moist.Configuration.UI.Pages.Account.Register
                 await signInManager.SignInAsync(user, true);
             }
 
-            return RedirectToPage("/Panel/StoreProfile/Index", new {m = 1});
+            return RedirectToAction("Profile", "Panel", new {m = MessageType.Welcome});
         }
     }
 }

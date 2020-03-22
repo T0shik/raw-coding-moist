@@ -22,6 +22,8 @@ namespace Moist.Configuration.UI
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRouting(options => options.LowercaseUrls = true);
+
             services.AddDbContext<AppDbContext>(options =>
             {
                 if (_env.IsDevelopment())
@@ -50,8 +52,12 @@ namespace Moist.Configuration.UI
                     .AddDefaultTokenProviders();
 
             services.AddScoped<IShopStore, ShopStore>();
+            services.AddScoped<CreateSchemaContext>();
             services.AddScoped<ChangeShopProfileContext>();
             services.AddScoped<InitialiseShopContext>();
+
+            services.AddControllersWithViews();
+
             var mvcBuilder = services.AddRazorPages();
 
             if (_env.IsDevelopment())
@@ -71,7 +77,11 @@ namespace Moist.Configuration.UI
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapRazorPages(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
+            });
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Moist.Core;
 using Moist.Core.Models;
+using Moist.Core.Schemas;
 
 namespace Moist.Configuration {
     public class CloseSchemaContext
@@ -14,7 +15,7 @@ namespace Moist.Configuration {
 
         public async Task<bool> Close(int shopId, int schemaId)
         {
-            var shop = await _shopStore.GetSchema<BaseSchema>(schemaId);
+            var shop = await _shopStore.GetSchema(schemaId);
             
             if (shop.ShopId != shopId)
             {

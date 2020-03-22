@@ -1,0 +1,32 @@
+﻿@model CreateSchemaContext.Form
+
+@{
+    Layout = "_PanelLayout";
+}
+
+<form method="post">
+    <div>
+        <input asp-for="Title">
+    </div>
+    <div>
+        <input asp-for="Description">
+    </div>
+    <div>
+        <select asp-for="Type">
+            <option value="0">Days Visisted</option>
+        </select>
+    </div>
+    <div>
+        <input asp-for="Perpetual">
+    </div>
+    <div>
+        <input asp-for="Goal">
+    </div>
+    <div>
+        <input asp-for="ValidSince">
+    </div>
+    <div>
+        <input asp-for="ValidUntil">
+    </div>
+    <button type="submit">Create</button>
+</form>

@@ -29,17 +29,17 @@ namespace Moist.Application
         {
             var progress = await _userManager.GetProgressAsync(customer, progressId);
 
-            var config = await _shopStore.GetSchema<DaysVisitedSchemaSchema>(progress.SchemaId);
+            var config = await _shopStore.GetSchema(progress.SchemaId);
 
-            if (progress.Progress < config.Goal)
-            {
-                throw new Exception();
-            }
-
-            if (!config.Active(_dateTime))
-            {
-                throw new Exception();
-            }
+            // if (progress.Progress < config.Goal)
+            // {
+            //     throw new Exception();
+            // }
+            //
+            // if (!config.Active(_dateTime))
+            // {
+            //     throw new Exception();
+            // }
 
             return await _codeGenerator.CreateRedemptionCode();
         }

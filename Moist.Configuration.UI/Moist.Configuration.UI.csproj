@@ -11,11 +11,31 @@
 
     <ItemGroup>
       <Folder Include="Pages\Account\Login" />
+      <Folder Include="Pages\Panel" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.2" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\Home\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Index\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Panel\Main\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Panel\Schemas\Create\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Panel\StoreProfile\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Panel\_PanelLayout.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Panel\_ViewStart.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Shared\_Layout.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Panel\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Panel\Profile.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\_ViewImports.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Panel\Schemas\Index.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Pages\Panel\_PanelLayout.cshtml" />
     </ItemGroup>
 
 </Project>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Moist.Core;
 using Moist.Core.Models;
+using Moist.Core.Schemas;
 
 namespace Moist.Database.Stores
 {
@@ -14,14 +15,42 @@ namespace Moist.Database.Stores
         public ShopStore(AppDbContext ctx)
             : base(ctx) { }
 
-        public Task<T> GetSchema<T>(int schemaId)
+        public Task<int> GetUsersShopId(string userId)
         {
-            throw new System.NotImplementedException();
+            return Db.Employees
+                     .Where(x => x.UserId == userId)
+                     .Select(x => x.ShopId)
+                     .FirstOrDefaultAsync();
         }
 
-        public Task<bool> SaveDaysVisitedSchema(DaysVisitedSchemaSchema form)
+        public Task<Schema> GetSchema(int schemaId)
         {
-            throw new System.NotImplementedException();
+            return Db.Schemas.FirstOrDefaultAsync(x => x.Id == schemaId);
+        }
+
+        public Task<T> GetSchema<T>(int schemaId, Expression<Func<Schema, T>> selector) where T : BaseSchema
+        {
+            return Db.Schemas
+                     .Where(x => x.Id == schemaId)
+                     .Select(selector)
+                     .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Schema>> GetSchemas(string userId)
+        {
+            var storeId = await GetUsersShopId(userId);
+
+            var schemas = await Db.Schemas
+                                  .Where(x => x.Id == storeId)
+                                  .ToListAsync();
+
+            return schemas;
+        }
+
+        public Task<bool> SaveSchema(Schema schema)
+        {
+            Db.Schemas.Add(schema);
+            return Save();
         }
 
         public Task<bool> CreateShopForUser(string userId)

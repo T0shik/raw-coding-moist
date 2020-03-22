@@ -26,8 +26,8 @@ namespace Moist.Core.Tests.DaysVisitedTests
                 Progress = 0
             };
 
-        private static DaysVisitedSchemaSchema Config =>
-            new DaysVisitedSchemaSchema
+        private static Schema Config =>
+            new Schema
             {
                 Goal = 6,
                 ShopId = 1,
@@ -43,7 +43,7 @@ namespace Moist.Core.Tests.DaysVisitedTests
         public async Task IncrementsProgress_WhenPerpetualAndValidCode()
         {
             var progress = Progress;
-            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaSchema>(1)).ReturnsAsync(Config);
+            _shopMock.Setup(x => x.GetSchema(1)).ReturnsAsync(Config);
             _userMock.Setup(x => x.GetProgressAsync("customer", 1))
                      .ReturnsAsync(progress);
             _codeMock.Setup(x => x.ValidateRewardCode(1, "code")).ReturnsAsync(new ValidationResult { Success = true});
@@ -69,7 +69,7 @@ namespace Moist.Core.Tests.DaysVisitedTests
             config.Perpetual = false;
             config.ValidSince = new DateTime(2010, 1, 1, 6, 0, 0);
             config.ValidUntil = new DateTime(2010, 1, 2, 6, 0, 0);
-            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaSchema>(1)).ReturnsAsync(config);
+            _shopMock.Setup(x => x.GetSchema(1)).ReturnsAsync(config);
             _userMock.Setup(x => x.GetProgressAsync("customer", 1)).ReturnsAsync(Progress);
             _dateMock.Setup(x => x.Now).Returns(currentTime);
 
@@ -79,7 +79,7 @@ namespace Moist.Core.Tests.DaysVisitedTests
         [Fact]
         public Task Throws_WhenInvalidCode()
         {
-            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaSchema>(1)).ReturnsAsync(Config);
+            _shopMock.Setup(x => x.GetSchema(1)).ReturnsAsync(Config);
             _userMock.Setup(x => x.GetProgressAsync("customer", 1)).ReturnsAsync(Progress);
             _codeMock.Setup(x => x.ValidateRewardCode(1, "code")).ReturnsAsync(new ValidationResult { Success = false});
 

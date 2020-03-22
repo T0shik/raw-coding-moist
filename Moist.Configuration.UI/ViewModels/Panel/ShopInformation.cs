@@ -1,4 +1,4 @@
-﻿namespace Moist.Configuration.UI.Pages.Panel.Main
+﻿namespace Moist.Configuration.UI.ViewModels.Panel
 {
     public class ShopInformation
     {

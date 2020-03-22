@@ -19,14 +19,14 @@ namespace Moist.Core.Tests
         {
             _context = new JoinSchema(_shopMock.Object, _userMock.Object, _dateMock.Object);
         }
-        
-        private static DaysVisitedSchemaSchema Config =>
-            new DaysVisitedSchemaSchema
+
+        private static Schema Config =>
+            new Schema
             {
                 Goal = 6,
                 Perpetual = true
             };
-        
+
         [Fact]
         public Task Throws_WhenSchemaNotValid()
         {
@@ -35,7 +35,7 @@ namespace Moist.Core.Tests
             config.Perpetual = false;
             config.ValidSince = new DateTime(2010, 1, 1, 6, 0, 0);
             config.ValidUntil = new DateTime(2010, 1, 2, 6, 0, 0);
-            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaSchema>(1)).ReturnsAsync(config);
+            _shopMock.Setup(x => x.GetSchema(1)).ReturnsAsync(config);
             _dateMock.Setup(x => x.Now).Returns(currentTime);
 
             return ThrowsAsync<Exception>(() => _context.Join("customer", 1));
@@ -44,7 +44,7 @@ namespace Moist.Core.Tests
         [Fact]
         public Task Throws_WhenUserAlreadyJoinedSchema()
         {
-            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaSchema>(1)).ReturnsAsync(Config);
+            _shopMock.Setup(x => x.GetSchema(1)).ReturnsAsync(Config);
             _userMock.Setup(x => x.InSchemaAsync("customer", 1)).ReturnsAsync(true);
             return ThrowsAsync<Exception>(() => _context.Join("customer", 1));
         }
@@ -57,10 +57,10 @@ namespace Moist.Core.Tests
                 CustomerId = "customer",
                 SchemaId = 1
             };
-            _shopMock.Setup(x => x.GetSchema<DaysVisitedSchemaSchema>(1)).ReturnsAsync(Config);
+            _shopMock.Setup(x => x.GetSchema(1)).ReturnsAsync(Config);
             _userMock.Setup(x => x.InSchemaAsync("customer", 1)).ReturnsAsync(false);
             _userMock.Setup(x => x.CreateSchemaProgressAsync("customer", 1)).ReturnsAsync(progress);
-                        
+
             var savedProgress = await _context.Join("customer", 1);
 
             Equal("customer", savedProgress.CustomerId);

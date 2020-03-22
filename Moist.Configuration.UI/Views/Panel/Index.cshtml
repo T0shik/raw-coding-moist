@@ -1,0 +1,11 @@
+﻿@model ShopInformation
+
+@{
+    Layout = "_PanelLayout";
+    var message = ViewData["Message"];
+}
+
+<h1>@message</h1>
+
+<h1>@Model.Name</h1>
+<h1>@Model.Description</h1>

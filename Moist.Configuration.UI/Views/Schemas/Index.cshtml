@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Moist.Core.Models.Schema>
+
+@{
+    Layout = "_PanelLayout";
+}
+<h1>Schemas page</h1>
+
+<div>
+    <a asp-controller="Schemas" asp-action="Create" >Create Schema</a>
+</div>
+
+@foreach (var s in Model)
+{
+    <p>@s.Title - @s.Description</p>
+}

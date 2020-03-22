@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Moist.Configuration.Tests.Mocks;
 using Moist.Core;
 using Moist.Core.Models;
 using Moq;
@@ -15,11 +14,10 @@ namespace Moist.Configuration.Tests
         private const int c_shopId = 1;
         private const int c_schemaId = 1;
 
-        private MockSchema CreateMockSchema() =>
-            new MockSchema
+        private Schema CreateMockSchema() =>
+            new Schema
             {
                 Id = c_schemaId,
-                ShopId = c_shopId,
                 Enabled = true
             };
 
@@ -32,7 +30,8 @@ namespace Moist.Configuration.Tests
         public async Task SetsEnableFlagToFalse_WhenSchemaBelongsToShop()
         {
             var mockSchema = CreateMockSchema();
-            _shopMock.Setup(x => x.GetSchema<BaseSchema>(c_schemaId)).ReturnsAsync(mockSchema);
+            mockSchema.ShopId = c_shopId;
+            _shopMock.Setup(x => x.GetSchema(c_schemaId)).ReturnsAsync(mockSchema);
             
             var result = await _context.Close(c_shopId, c_schemaId);
             
@@ -44,7 +43,7 @@ namespace Moist.Configuration.Tests
         public async Task ReturnsFalseWhenSchemaNotOwnedByShop()
         {
             var mockSchema = CreateMockSchema();
-            _shopMock.Setup(x => x.GetSchema<BaseSchema>(c_schemaId)).ReturnsAsync(mockSchema);
+            _shopMock.Setup(x => x.GetSchema(c_schemaId)).ReturnsAsync(mockSchema);
             
             var result = await _context.Close(2, c_schemaId);
             

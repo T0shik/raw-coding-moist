@@ -26,13 +26,13 @@ namespace Moist.Configuration.Tests
                 Type = SchemaType.DaysVisited,
             };
 
-            _shopMock.Setup(x => x.SaveDaysVisitedSchema(It.IsAny<DaysVisitedSchemaSchema>()))
+            _shopMock.Setup(x => x.SaveSchema(It.IsAny<Schema>()))
                      .ReturnsAsync(true);
 
             var result = await _command.Create(form);
 
             True(result);
-            _shopMock.Verify(x => x.SaveDaysVisitedSchema(It.IsAny<DaysVisitedSchemaSchema>()));
+            _shopMock.Verify(x => x.SaveSchema(It.IsAny<Schema>()));
         }
     }
 }

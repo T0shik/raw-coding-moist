@@ -1,6 +1,8 @@
 ﻿using System;
+using Moist.Core.Models;
+using Moist.Core.Schemas;
 
-namespace Moist.Core.Models
+namespace Moist.Core
 {
     public class DaysVisitedSchemaSchema : BaseSchema
     {

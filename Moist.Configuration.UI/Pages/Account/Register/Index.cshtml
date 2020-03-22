@@ -5,9 +5,9 @@
 
 }
 
-<form method="post">    
-    <input asp-for="Form.Email">
-    <input asp-for="Form.Password">
-    <input asp-for="Form.ConfirmPassword">
+<form asp-page="/Account/Register/Index" method="post">
+    <input asp-for="Form.Email" value="@Model.Form.Email">
+    <input asp-for="Form.Password" value="@Model.Form.Password">
+    <input asp-for="Form.ConfirmPassword" value="@Model.Form.ConfirmPassword">
     <button type="submit">Register</button>
 </form>

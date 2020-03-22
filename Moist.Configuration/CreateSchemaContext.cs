@@ -16,6 +16,7 @@ namespace Moist.Configuration
 
         public class Form
         {
+            public string UserId { get; set; }
             public string Title { get; set; }
             public string Description { get; set; }
             public SchemaType Type { get; set; }
@@ -25,12 +26,15 @@ namespace Moist.Configuration
             public DateTime ValidUntil { get; set; }
         }
 
-        public Task<bool> Create(Form form)
+        public async Task<bool> Create(Form form)
         {
+            var shopId = await _shopStore.GetUsersShopId(form.UserId);
+
             if (form.Type == SchemaType.DaysVisited)
             {
-                return _shopStore.SaveDaysVisitedSchema(new DaysVisitedSchemaSchema
+                return await _shopStore.SaveSchema(new Schema
                 {
+                    ShopId = shopId,
                     Title = form.Title,
                     Description = form.Description,
                     Perpetual = form.Perpetual,
@@ -40,7 +44,7 @@ namespace Moist.Configuration
                 });
             }
 
-            return Task.FromResult(false);
+            return false;
         }
     }
 }

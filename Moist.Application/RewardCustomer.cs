@@ -29,12 +29,12 @@ namespace Moist.Application
         {
             var progress = await _userManager.GetProgressAsync(customerId, progressId);
 
-            var config = await _shopStore.GetSchema<DaysVisitedSchemaSchema>(progress.SchemaId);
-
-            if (!config.Active(_dateTime))
-            {
-                throw new Exception();
-            }
+            var config = await _shopStore.GetSchema(progress.SchemaId);
+            //
+            // if (!config.Active(_dateTime))
+            // {
+            //     throw new Exception();
+            // }
 
             var result = await _codeGenerator.ValidateRewardCode(config.ShopId, code); 
             if (!result.Success)
