@@ -24,6 +24,7 @@ namespace Moist.Core.Tests
             new Schema
             {
                 Goal = 6,
+                Type = SchemaType.DaysVisited,
                 Perpetual = true
             };
 

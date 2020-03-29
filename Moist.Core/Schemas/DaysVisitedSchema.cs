@@ -1,8 +1,6 @@
 ﻿using System;
-using Moist.Core.Models;
-using Moist.Core.Schemas;
 
-namespace Moist.Core
+namespace Moist.Core.Schemas
 {
     public class DaysVisitedSchemaSchema : BaseSchema
     {
@@ -11,14 +9,22 @@ namespace Moist.Core
         public DateTime ValidSince { get; set; }
         public DateTime ValidUntil { get; set; }
 
-
-        public bool Active(IDateTime dateTime)
+        public override bool Valid(IDateTime dateTime)
         {
             if (Perpetual) return true;
 
             var now = dateTime.Now;
 
             return now >= ValidSince && now <= ValidUntil;
+        }
+
+        public override bool ReachedGoal(object progress)
+        {
+            if (progress is int daysVisited)
+            {
+                return daysVisited == Goal;
+            }
+            return false;
         }
     }
 }

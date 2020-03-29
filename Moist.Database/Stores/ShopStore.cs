@@ -56,7 +56,13 @@ namespace Moist.Database.Stores
         public Task<bool> CreateShopForUser(string userId)
         {
             var shop = new Shop();
-            shop.Employees.Add(new Employee {UserId = userId, CanChangeProfile = true});
+            shop.Employees.Add(new Employee
+            {
+                UserId = userId,
+                CanChangeProfile = true,
+                CanActivateSchema = true,
+                CanGenerateSchemaCode = true,
+            });
 
             Db.Shops.Add(shop);
             return Save();
@@ -77,11 +83,28 @@ namespace Moist.Database.Stores
                      .FirstOrDefaultAsync();
         }
 
+        public Task<bool> UserCanGenerateSchemaCode(string userId, int storeId)
+        {
+            return Task.FromResult(true);
+            return Db.Employees
+                     .Where(x => x.UserId == userId && x.ShopId == storeId)
+                     .Select(x => x.CanGenerateSchemaCode)
+                     .FirstOrDefaultAsync();
+        }
+
         public Task<bool> UserCanChangeProfile(string userId, int storeId)
         {
             return Db.Employees
                      .Where(x => x.UserId == userId && x.ShopId == storeId)
                      .Select(x => x.CanChangeProfile)
+                     .FirstOrDefaultAsync();
+        }
+
+        public Task<bool> UserCanActivateSchema(string userId, int storeId)
+        {
+            return Db.Employees
+                     .Where(x => x.UserId == userId && x.ShopId == storeId)
+                     .Select(x => x.CanActivateSchema)
                      .FirstOrDefaultAsync();
         }
     }

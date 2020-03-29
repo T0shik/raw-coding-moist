@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Moist.Core.Models;
 
 namespace Moist.Application.Api.Controllers
@@ -10,6 +11,15 @@ namespace Moist.Application.Api.Controllers
         public Shop GetShop(int id)
         {
             return new Shop {Id = id};
+        }
+
+        [HttpGet("code")]
+        public Task<string> ShopCode(
+            int storeId,
+            int schemaId,
+            [FromServices] GenerateRewardCode doer)
+        {
+            return doer.Create("a", storeId, schemaId);
         }
     }
 }

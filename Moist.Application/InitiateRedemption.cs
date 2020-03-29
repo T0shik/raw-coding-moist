@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Moist.Core;
 using Moist.Core.Code;
 using Moist.Core.Models;
+using Moist.Core.Schemas;
 
 namespace Moist.Application
 {
@@ -10,18 +11,18 @@ namespace Moist.Application
     {
         private readonly IUserManager _userManager;
         private readonly IShopStore _shopStore;
-        private readonly ICodeGenerator _codeGenerator;
+        private readonly ICodeStore _codeStore;
         private readonly IDateTime _dateTime;
 
         public InitiateRedemption(
             IUserManager userManager,
             IShopStore shopStore,
-            ICodeGenerator codeGenerator,
+            ICodeStore codeStore,
             IDateTime dateTime)
         {
             _userManager = userManager;
             _shopStore = shopStore;
-            _codeGenerator = codeGenerator;
+            _codeStore = codeStore;
             _dateTime = dateTime;
         }
 
@@ -29,19 +30,19 @@ namespace Moist.Application
         {
             var progress = await _userManager.GetProgressAsync(customer, progressId);
 
-            var config = await _shopStore.GetSchema(progress.SchemaId);
+            var schema = await _shopStore.GetSchema(progress.SchemaId);
+            var assignedSchema = SchemaFactory.Resolve(schema);
+            if (!assignedSchema.ReachedGoal(progress.Progress))
+            {
+                throw new Exception();
+            }
 
-            // if (progress.Progress < config.Goal)
-            // {
-            //     throw new Exception();
-            // }
-            //
-            // if (!config.Active(_dateTime))
-            // {
-            //     throw new Exception();
-            // }
+            if (!assignedSchema.Valid(_dateTime))
+            {
+                throw new Exception();
+            }
 
-            return await _codeGenerator.CreateRedemptionCode();
+            return await _codeStore.CreateRedemptionCode();
         }
     }
 }

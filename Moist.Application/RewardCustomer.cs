@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Moist.Core;
 using Moist.Core.Code;
 using Moist.Core.Models;
+using Moist.Core.Schemas;
 
 namespace Moist.Application
 {
@@ -10,18 +11,18 @@ namespace Moist.Application
     {
         private readonly IShopStore _shopStore;
         private readonly IUserManager _userManager;
-        private readonly ICodeGenerator _codeGenerator;
+        private readonly ICodeStore _codeStore;
         private readonly IDateTime _dateTime;
 
         public RewardCustomer(
             IShopStore shopStore,
             IUserManager userManager,
-            ICodeGenerator codeGenerator,
+            ICodeStore codeStore,
             IDateTime dateTime)
         {
             _shopStore = shopStore;
             _userManager = userManager;
-            _codeGenerator = codeGenerator;
+            _codeStore = codeStore;
             _dateTime = dateTime;
         }
 
@@ -29,14 +30,14 @@ namespace Moist.Application
         {
             var progress = await _userManager.GetProgressAsync(customerId, progressId);
 
-            var config = await _shopStore.GetSchema(progress.SchemaId);
-            //
-            // if (!config.Active(_dateTime))
-            // {
-            //     throw new Exception();
-            // }
+            var schema = await _shopStore.GetSchema(progress.SchemaId);
+            var assignedSchema = SchemaFactory.Resolve(schema);
+            if (!assignedSchema.Valid(_dateTime))
+            {
+                throw new Exception();
+            }
 
-            var result = await _codeGenerator.ValidateRewardCode(config.ShopId, code); 
+            var result = await _codeStore.ValidateRewardCode(schema.ShopId, code);
             if (!result.Success)
             {
                 throw new Exception();

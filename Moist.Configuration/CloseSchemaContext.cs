@@ -21,7 +21,8 @@ namespace Moist.Configuration {
             {
                 return false;
             }
-            shop.Enabled = false;
+            shop.Closed = true;
+            shop.Activate = false;
 
             return true;
         }

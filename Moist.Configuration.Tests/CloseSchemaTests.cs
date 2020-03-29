@@ -18,7 +18,7 @@ namespace Moist.Configuration.Tests
             new Schema
             {
                 Id = c_schemaId,
-                Enabled = true
+                Activate = true
             };
 
         public CloseSchemaTests()
@@ -36,7 +36,8 @@ namespace Moist.Configuration.Tests
             var result = await _context.Close(c_shopId, c_schemaId);
             
             True(result);
-            False(mockSchema.Enabled);
+            True(mockSchema.Closed);
+            False(mockSchema.Activate);
         }
         
         [Fact]
@@ -48,7 +49,7 @@ namespace Moist.Configuration.Tests
             var result = await _context.Close(2, c_schemaId);
             
             False(result);
-            True(mockSchema.Enabled);
+            True(mockSchema.Activate);
         }
     }
 }

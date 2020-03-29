@@ -7,6 +7,9 @@ namespace Moist.Core.Schemas
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public bool Enabled { get; set; }
+        public bool Closed { get; set; }
+        public bool Active { get; set; }
+        public abstract bool Valid(IDateTime dateTime);
+        public abstract bool ReachedGoal(object progress);
     }
 }

@@ -1,4 +1,5 @@
-﻿﻿using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moist.Configuration.UI.ViewModels.Panel;
 using Moist.Core;
@@ -6,8 +7,8 @@ using Moist.Database;
 
 namespace Moist.Configuration.UI.Controllers
 {
+    [Authorize]
     [Route("[controller]/[action]")]
-
     public class PanelController : BaseController
     {
         private readonly AppDbContext _dbContext;

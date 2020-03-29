@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Moist.Core;
 using Moist.Core.Models;
+using Moist.Core.Schemas;
 
 namespace Moist.Application {
     public class JoinSchema
@@ -22,11 +23,12 @@ namespace Moist.Application {
         public async Task<SchemaProgress> Join(string customerId, int schemaId)
         {
             var schema = await _shopStore.GetSchema(schemaId);
-            //
-            // if (!schema.Active(_dateTime))
-            // {
-            //     throw new Exception();
-            // }
+
+            var assignedSchema = SchemaFactory.Resolve(schema);
+            if (!assignedSchema.Valid(_dateTime))
+            {
+                throw new Exception();
+            }
 
             if (await _userManager.InSchemaAsync(customerId, schemaId))
             {

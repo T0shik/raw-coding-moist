@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moist.Core;
 
 namespace Moist.Configuration.UI.Controllers.Panel
 {
-    [Route("panel/[controller]/[action]")]
+    [Authorize]
+    [Route("panel/[controller]")]
     public class SchemasController : BaseController
     {
         [HttpGet]
@@ -13,11 +15,10 @@ namespace Moist.Configuration.UI.Controllers.Panel
             return View(await store.GetSchemas(UserId));
         }
 
-        [HttpGet]
+        [HttpGet("create")]
         public IActionResult Create() => View(new CreateSchemaContext.Form());
 
-
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create(
             CreateSchemaContext.Form form,
             [FromServices] CreateSchemaContext context)
@@ -28,6 +29,17 @@ namespace Moist.Configuration.UI.Controllers.Panel
             }
 
             await context.Create(form);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet("activate")]
+        public IActionResult Activate(
+            int shopId,
+            int schemaId,
+            [FromServices] ActivateSchemaContext context)
+        {
+            context.Activate(UserId, shopId, schemaId);
 
             return RedirectToAction("Index");
         }

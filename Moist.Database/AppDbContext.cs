@@ -9,6 +9,7 @@ namespace Moist.Database
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
 
+        public DbSet<Code> Codes { get; set; }
         public DbSet<Shop> Shops { get; set; }
         public DbSet<Schema> Schemas { get; set; }
         public DbSet<Employee> Employees { get; set; }

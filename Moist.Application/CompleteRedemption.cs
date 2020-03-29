@@ -10,24 +10,24 @@ namespace Moist.Application
     {
         private readonly IShopStore _shopStore;
         private readonly IUserManager _userManager;
-        private readonly ICodeGenerator _codeGenerator;
+        private readonly ICodeStore _codeStore;
         private readonly IDateTime _dateTime;
 
         public CompleteRedemption(
             IShopStore shopStore,
             IUserManager userManager,
-            ICodeGenerator codeGenerator,
+            ICodeStore codeStore,
             IDateTime dateTime)
         {
             _shopStore = shopStore;
             _userManager = userManager;
-            _codeGenerator = codeGenerator;
+            _codeStore = codeStore;
             _dateTime = dateTime;
         }
 
         public async Task<bool> Complete(int shopId, string code)
         {
-            var result = await _codeGenerator.ValidateRedemptionCode(shopId, code);
+            var result = await _codeStore.ValidateRedemptionCode(shopId, code);
             if (!result.Success)
             {
                 throw new InvalidRedemptionCode();

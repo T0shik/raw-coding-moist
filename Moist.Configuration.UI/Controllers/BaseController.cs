@@ -10,5 +10,6 @@ namespace Moist.Configuration.UI.Controllers
             HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)
                        .Select(c => c.Value)
                        .FirstOrDefault();
+
     }
 }

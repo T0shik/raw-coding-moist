@@ -24,17 +24,7 @@ namespace Moist.Configuration.UI
         {
             services.AddRouting(options => options.LowercaseUrls = true);
 
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                if (_env.IsDevelopment())
-                {
-                    options.UseInMemoryDatabase("DEV");
-                }
-                else
-                {
-                    options.UseInMemoryDatabase("DEV");
-                }
-            });
+            services.AddMoistDatabase();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                     {
@@ -55,6 +45,7 @@ namespace Moist.Configuration.UI
             services.AddScoped<CreateSchemaContext>();
             services.AddScoped<ChangeShopProfileContext>();
             services.AddScoped<InitialiseShopContext>();
+            services.AddScoped<ActivateSchemaContext>();
 
             services.AddControllersWithViews();
 
