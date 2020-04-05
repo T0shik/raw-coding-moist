@@ -9,6 +9,8 @@ namespace Moist.Core
 {
     public interface IShopStore : IStore
     {
+        Task<List<T>> GetShops<T>(Expression<Func<Shop, T>> selector);
+
         Task<int> GetUsersShopId(string userId);
         Task<Schema> GetSchema(int schemaId);
         Task<List<Schema>> GetSchemas(string userId);

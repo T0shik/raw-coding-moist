@@ -15,6 +15,11 @@ namespace Moist.Database.Stores
         public ShopStore(AppDbContext ctx)
             : base(ctx) { }
 
+        public Task<List<T>> GetShops<T>(Expression<Func<Shop, T>> selector)
+        {
+            return Db.Shops.Select(selector).ToListAsync();
+        }
+
         public Task<int> GetUsersShopId(string userId)
         {
             return Db.Employees

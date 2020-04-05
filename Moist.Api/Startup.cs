@@ -19,6 +19,14 @@ namespace Moist.Application.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication("Bearer")
+                    .AddJwtBearer("Bearer", config =>
+                    {
+                        config.Authority = "https://localhost:5004";
+                        config.Audience = "user-api";
+                        config.RequireHttpsMetadata = true;
+                    });
+
             services.AddMoistDatabase();
 
             services.AddScoped<GenerateRewardCode>();
@@ -44,6 +52,8 @@ namespace Moist.Application.Api
             }
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
         }
