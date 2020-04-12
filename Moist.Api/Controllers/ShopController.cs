@@ -1,24 +1,23 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Moist.Core;
+using Moist.Application.Services.Shop.Commands;
+using Moist.Application.Services.Shop.Queries;
 using Moist.Core.Models;
 
 namespace Moist.Application.Api.Controllers
 {
     [Route("/shops")]
-    public class ShopController : Controller
+    public class ShopController : BaseController
     {
+        public ShopController(IMediator mediator)
+            : base(mediator) { }
+
         [HttpGet]
-        public async Task<IActionResult> GetShops(
-            [FromServices] IShopStore store)
+        public Task<IAsyncEnumerable<Shop>> GetShops()
         {
-            var shops = await store.GetShops(shop => new
-            {
-                shop.Id,
-                shop.Description,
-            });
-            return Ok(shops);
+            return Mediator.Send(new GetShopsQuery());
         }
 
         [HttpGet("{id}")]
@@ -28,12 +27,20 @@ namespace Moist.Application.Api.Controllers
         }
 
         [HttpGet("code")]
-        public Task<string> ShopCode(
-            int storeId,
-            int schemaId,
-            [FromServices] GenerateRewardCode doer)
+        public Task<Response<string>> ShopCode(GenerateRewardCommand command)
         {
-            return doer.Create("a", storeId, schemaId);
+            return Mediator.Send(command);
+        }
+
+        public Task<Core.Models.Shop> Index()
+        {
+            return Mediator.Send(new GetProfileQuery());
+        }
+
+        [HttpPut]
+        public Task<Response> UpdateProfile(ChangeShopProfileCommand command)
+        {
+            return Mediator.Send(command);
         }
     }
 }

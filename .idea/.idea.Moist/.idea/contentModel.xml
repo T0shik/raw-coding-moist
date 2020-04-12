@@ -18,7 +18,9 @@
         <e p="appsettings.json" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="Controllers" t="Include">
+          <e p="BaseController.cs" t="Include" />
           <e p="HomeController.cs" t="Include" />
+          <e p="SchemasController.cs" t="Include" />
           <e p="ShopController.cs" t="Include" />
         </e>
         <e p="Moist.Api.csproj" t="IncludeRecursive" />
@@ -36,16 +38,7 @@
         <e p="Startup.cs" t="Include" />
       </e>
       <e p="Moist.Application" t="IncludeRecursive">
-        <e p="ActivateSchemaContext.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
-        <e p="ChangeShopProfileContext.cs" t="Include" />
-        <e p="CloseSchemaContext.cs" t="Include" />
-        <e p="CompleteRedemption.cs" t="Include" />
-        <e p="CreateSchemaContext.cs" t="Include" />
-        <e p="GenerateRewardCode.cs" t="Include" />
-        <e p="InitialiseShopContext.cs" t="Include" />
-        <e p="InitiateRedemption.cs" t="Include" />
-        <e p="JoinSchema.cs" t="Include" />
         <e p="Moist.Application.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
@@ -54,82 +47,34 @@
             </e>
           </e>
         </e>
-        <e p="RewardCustomer.cs" t="Include" />
-      </e>
-      <e p="Moist.Configuration.Tests" t="IncludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-        <e p="ChangeShopProfileContextTests.cs" t="Include" />
-        <e p="CloseSchemaTests.cs" t="Include" />
-        <e p="CreateSchemaTests.cs" t="Include" />
-        <e p="InitilizeShopTests.cs" t="Include" />
-        <e p="Moist.Configuration.Tests.csproj" t="IncludeRecursive" />
-        <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
-            <e p="netcoreapp3.1" t="Include">
-              <e p="Moist.Configuration.Tests.AssemblyInfo.cs" t="Include" />
+        <e p="Response.cs" t="Include" />
+        <e p="Response{T}.cs" t="Include" />
+        <e p="Services" t="Include">
+          <e p="Schema" t="Include">
+            <e p="Commands" t="Include">
+              <e p="ActivateSchemaCommand.cs" t="Include" />
+              <e p="CloseSchemaCommand.cs" t="Include" />
+              <e p="CreateSchemaCommand.cs" t="Include" />
             </e>
           </e>
-        </e>
-        <e p="RegisterEmployeeTests.cs" t="Include" />
-      </e>
-      <e p="Moist.Configuration.UI" t="IncludeRecursive">
-        <e p="appsettings.Development.json" t="Include" />
-        <e p="appsettings.json" t="Include" />
-        <e p="bin" t="ExcludeRecursive" />
-        <e p="Controllers" t="Include">
-          <e p="BaseController.cs" t="Include" />
-          <e p="Panel" t="Include">
-            <e p="SchemasController.cs" t="Include" />
-          </e>
-          <e p="PanelController.cs" t="Include" />
-        </e>
-        <e p="Moist.Configuration.UI.csproj" t="IncludeRecursive" />
-        <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
-            <e p="netcoreapp3.1" t="Include">
-              <e p="Moist.Configuration.UI.AssemblyInfo.cs" t="Include" />
-              <e p="Moist.Configuration.UI.RazorAssemblyInfo.cs" t="Include" />
+          <e p="Shop" t="Include">
+            <e p="Commands" t="Include">
+              <e p="ChangeShopProfileCommand.cs" t="Include" />
+              <e p="CompleteRedemptionCommand.cs" t="Include" />
+              <e p="GenerateRewardCommand.cs" t="Include" />
+              <e p="InitialiseShopCommand.cs" t="Include" />
+              <e p="RewardCustomerCommand.cs" t="Include" />
+            </e>
+            <e p="Queries" t="Include">
+              <e p="GetProfileQuery.cs" t="Include" />
+              <e p="GetShopsQuery.cs" t="Include" />
             </e>
           </e>
-        </e>
-        <e p="Pages" t="Include">
-          <e p="_ViewImports.cshtml" t="Include" />
-          <e p="_ViewStart.cshtml" t="Include" />
-          <e p="Account" t="Include">
-            <e p="Login" t="Include" />
-            <e p="Register" t="Include">
-              <e p="Index.cshtml" t="Include" />
-              <e p="Index.cshtml.cs" t="Include" />
-              <e p="RegisterForm.cs" t="Include" />
+          <e p="User" t="Include">
+            <e p="Commands" t="Include">
+              <e p="InitiateRedemptionCommand.cs" t="Include" />
+              <e p="JoinSchemaCommand.cs" t="Include" />
             </e>
-          </e>
-          <e p="BasePage.cs" t="Include" />
-          <e p="Panel" t="Include" />
-        </e>
-        <e p="Program.cs" t="Include" />
-        <e p="Properties" t="Include">
-          <e p="launchSettings.json" t="Include" />
-        </e>
-        <e p="Startup.cs" t="Include" />
-        <e p="ViewModels" t="Include">
-          <e p="Panel" t="Include">
-            <e p="MessageType.cs" t="Include" />
-            <e p="ShopInformation.cs" t="Include" />
-          </e>
-        </e>
-        <e p="Views" t="Include">
-          <e p="_ViewImports.cshtml" t="Include" />
-          <e p="Panel" t="Include">
-            <e p="Index.cshtml" t="Include" />
-            <e p="Profile.cshtml" t="Include" />
-          </e>
-          <e p="Schemas" t="Include">
-            <e p="Create.cshtml" t="Include" />
-            <e p="Index.cshtml" t="Include" />
-          </e>
-          <e p="Shared" t="Include">
-            <e p="_Layout.cshtml" t="Include" />
-            <e p="_PanelLayout.cshtml" t="Include" />
           </e>
         </e>
       </e>
@@ -176,11 +121,15 @@
       </e>
       <e p="Moist.Core.Tests" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
+        <e p="ChangeShopProfileContextTests.cs" t="Include" />
+        <e p="CloseSchemaTests.cs" t="Include" />
+        <e p="CreateSchemaTests.cs" t="Include" />
         <e p="DaysVisitedTests" t="Include">
           <e p="CompleteRedemptionTests.cs" t="Include" />
           <e p="InitiateRedemptionTests.cs" t="Include" />
           <e p="RewardCustomerTests.cs" t="Include" />
         </e>
+        <e p="InitilizeShopTests.cs" t="Include" />
         <e p="JoinSchemaTests.cs" t="Include" />
         <e p="Moist.Core.Tests.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
@@ -190,6 +139,7 @@
             </e>
           </e>
         </e>
+        <e p="RegisterEmployeeTests.cs" t="Include" />
       </e>
       <e p="Moist.Database" t="IncludeRecursive">
         <e p="AppDbContext.cs" t="Include" />
@@ -265,7 +215,6 @@
       <e p="src" t="Include">
         <e p="api" t="Include" />
         <e p="clients" t="Include" />
-        <e p="configuration" t="Include" />
       </e>
       <e p="Store" t="IncludeRecursive">
         <e p="appsettings.Development.json" t="Include" />

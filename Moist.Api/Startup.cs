@@ -1,8 +1,10 @@
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Moist.Application.Services;
 using Moist.Core;
 using Moist.Database.Stores;
 
@@ -37,9 +39,7 @@ namespace Moist.Application.Api
             var connectionString = _config.GetConnectionString("DefaultConnection");
             services.AddMoistDatabase(connectionString);
 
-            services.AddScoped<GenerateRewardCode>();
-            services.AddScoped<ICodeStore, CodeStore>();
-            services.AddScoped<IShopStore, ShopStore>();
+            services.AddMediatR(typeof(Response).Assembly);
 
             services.AddControllers();
             if (_env.IsDevelopment())

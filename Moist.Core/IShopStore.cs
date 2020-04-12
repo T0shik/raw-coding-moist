@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Moist.Core
 {
     public interface IShopStore : IStore
     {
-        Task<List<T>> GetShops<T>(Expression<Func<Shop, T>> selector);
+        IAsyncEnumerable<T> GetShops<T>(Expression<Func<Shop, T>> selector);
 
         Task<int> GetUsersShopId(string userId);
         Task<Schema> GetSchema(int schemaId);

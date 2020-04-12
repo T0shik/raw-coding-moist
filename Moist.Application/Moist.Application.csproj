@@ -9,4 +9,8 @@
       <ProjectReference Include="..\Moist.Core\Moist.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="8.0.1" />
+    </ItemGroup>
+
 </Project>

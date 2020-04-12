@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,9 +16,9 @@ namespace Moist.Database.Stores
         public ShopStore(AppDbContext ctx)
             : base(ctx) { }
 
-        public Task<List<T>> GetShops<T>(Expression<Func<Shop, T>> selector)
+        public IAsyncEnumerable<T> GetShops<T>(Expression<Func<Shop, T>> selector)
         {
-            return Db.Shops.Select(selector).ToListAsync();
+            return Db.Shops.Select(selector).AsAsyncEnumerable();
         }
 
         public Task<int> GetUsersShopId(string userId)
