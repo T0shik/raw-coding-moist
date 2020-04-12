@@ -10,6 +10,7 @@ namespace Moist.Core.Models
 
         public ICollection<Schema> Schemas { get; } = new List<Schema>();
         public ICollection<Employee> Employees { get; } = new List<Employee>();
+        public ICollection<Code> Codes { get; } = new List<Code>();
 
         // todo: list of employees
 

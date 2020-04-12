@@ -19,6 +19,11 @@ namespace Moist.Database
             base.OnModelCreating(builder);
 
             builder.Entity<Employee>().HasKey(x => new {x.ShopId, x.UserId});
+
+            builder.Entity<Shop>().HasMany(x => x.Codes)
+                   .WithOne(x => x.Shop)
+                   .HasForeignKey(x => x.ShopId)
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

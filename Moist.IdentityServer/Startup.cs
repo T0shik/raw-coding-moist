@@ -22,17 +22,22 @@ namespace Moist.IdentityServer
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRouting(options => options.LowercaseUrls = true);
             var connectionString = _config.GetConnectionString("DefaultConnection");
-
-            services.AddMoistDatabase();
+            services.AddMoistDatabase(connectionString);
 
             // AddIdentity registers the services
-            services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                config.Password.RequiredLength = 4;
-                config.Password.RequireDigit = false;
-                config.Password.RequireNonAlphanumeric = false;
-                config.Password.RequireUppercase = false;
+                if (_env.IsDevelopment())
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = 1;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequiredUniqueChars = 1;
+                }
             })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
@@ -40,8 +45,8 @@ namespace Moist.IdentityServer
             services.ConfigureApplicationCookie(config =>
             {
                 config.Cookie.Name = "Moist.IdentityServer.Cookie";
-                config.LoginPath = "/Auth/Login";
-                config.LogoutPath = "/Auth/Logout";
+                config.LoginPath = "/auth/login";
+                config.LogoutPath = "/auth/logout";
             });
 
             services.AddIdentityServer()

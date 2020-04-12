@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Moist.Core;
@@ -9,16 +10,22 @@ namespace Moist.Application.Api
 {
     public class Startup
     {
+        private readonly IConfiguration _config;
         private readonly IWebHostEnvironment _env;
         public const string CorsAll = "AllowAll";
 
-        public Startup(IWebHostEnvironment env)
+        public Startup(
+            IConfiguration config,
+            IWebHostEnvironment env)
         {
+            _config = config;
             _env = env;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRouting(options => options.LowercaseUrls = true);
+
             services.AddAuthentication("Bearer")
                     .AddJwtBearer("Bearer", config =>
                     {
@@ -27,7 +34,8 @@ namespace Moist.Application.Api
                         config.RequireHttpsMetadata = true;
                     });
 
-            services.AddMoistDatabase();
+            var connectionString = _config.GetConnectionString("DefaultConnection");
+            services.AddMoistDatabase(connectionString);
 
             services.AddScoped<GenerateRewardCode>();
             services.AddScoped<ICodeStore, CodeStore>();

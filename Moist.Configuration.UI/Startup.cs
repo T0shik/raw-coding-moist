@@ -22,7 +22,6 @@ namespace Moist.Configuration.UI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRouting(options => options.LowercaseUrls = true);
 
             services.AddMoistDatabase();
 
@@ -40,6 +39,7 @@ namespace Moist.Configuration.UI
                     })
                     .AddEntityFrameworkStores<AppDbContext>()
                     .AddDefaultTokenProviders();
+
 
             services.AddScoped<IShopStore, ShopStore>();
             services.AddScoped<CreateSchemaContext>();

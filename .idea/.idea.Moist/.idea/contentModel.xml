@@ -36,9 +36,14 @@
         <e p="Startup.cs" t="Include" />
       </e>
       <e p="Moist.Application" t="IncludeRecursive">
+        <e p="ActivateSchemaContext.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
+        <e p="ChangeShopProfileContext.cs" t="Include" />
+        <e p="CloseSchemaContext.cs" t="Include" />
         <e p="CompleteRedemption.cs" t="Include" />
+        <e p="CreateSchemaContext.cs" t="Include" />
         <e p="GenerateRewardCode.cs" t="Include" />
+        <e p="InitialiseShopContext.cs" t="Include" />
         <e p="InitiateRedemption.cs" t="Include" />
         <e p="JoinSchema.cs" t="Include" />
         <e p="Moist.Application.csproj" t="IncludeRecursive" />
@@ -50,22 +55,6 @@
           </e>
         </e>
         <e p="RewardCustomer.cs" t="Include" />
-      </e>
-      <e p="Moist.Configuration" t="IncludeRecursive">
-        <e p="ActivateSchemaContext.cs" t="Include" />
-        <e p="bin" t="ExcludeRecursive" />
-        <e p="ChangeShopProfileContext.cs" t="Include" />
-        <e p="CloseSchemaContext.cs" t="Include" />
-        <e p="CreateSchemaContext.cs" t="Include" />
-        <e p="InitialiseShopContext.cs" t="Include" />
-        <e p="Moist.Configuration.csproj" t="IncludeRecursive" />
-        <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
-            <e p="netcoreapp3.1" t="Include">
-              <e p="Moist.Configuration.AssemblyInfo.cs" t="Include" />
-            </e>
-          </e>
-        </e>
       </e>
       <e p="Moist.Configuration.Tests" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
@@ -206,6 +195,14 @@
         <e p="AppDbContext.cs" t="Include" />
         <e p="ApplicationUser.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
+        <e p="ef-migration-scripts.md" t="Include" />
+        <e p="Migrations" t="Include">
+          <e p="App" t="Include">
+            <e p="20200412172132_init.cs" t="Include" />
+            <e p="20200412172132_init.Designer.cs" t="Include" />
+            <e p="AppDbContextModelSnapshot.cs" t="Include" />
+          </e>
+        </e>
         <e p="Moist.Database.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
@@ -266,13 +263,9 @@
       <e p="Moist.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />
       <e p="src" t="Include">
-        <e p="api" t="Include">
-          <e p="tests" t="Include" />
-        </e>
+        <e p="api" t="Include" />
         <e p="clients" t="Include" />
-        <e p="configuration" t="Include">
-          <e p="tests" t="Include" />
-        </e>
+        <e p="configuration" t="Include" />
       </e>
       <e p="Store" t="IncludeRecursive">
         <e p="appsettings.Development.json" t="Include" />
@@ -301,6 +294,7 @@
           </e>
         </e>
       </e>
+      <e p="tests" t="Include" />
       <e p="User" t="IncludeRecursive">
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
