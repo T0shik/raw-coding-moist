@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Moist.Core;
+using Moist.Core.DateTimeInfrastructure;
 
 namespace Moist.Application.Services.Shop.Commands
 {
@@ -13,16 +14,16 @@ namespace Moist.Application.Services.Shop.Commands
 
     public class CompleteRedemptionCommandHandler : IRequestHandler<CompleteRedemptionCommand, Response>
     {
-        private readonly IUserManager _userManager;
+        private readonly IUserStore _userStore;
         private readonly ICodeStore _codeStore;
         private readonly IDateTime _dateTime;
 
         public CompleteRedemptionCommandHandler(
-            IUserManager userManager,
+            IUserStore userStore,
             ICodeStore codeStore,
             IDateTime dateTime)
         {
-            _userManager = userManager;
+            _userStore = userStore;
             _codeStore = codeStore;
             _dateTime = dateTime;
         }
@@ -35,7 +36,7 @@ namespace Moist.Application.Services.Shop.Commands
                 return Response.Fail("Invalid Code");
             }
 
-            var progress = await _userManager.GetProgressAsync(result.UserId, result.ProgressId);
+            var progress = await _userStore.GetProgressAsync(result.UserId, result.ProgressId);
 
             progress.Completed = true;
             progress.CompletedOn = _dateTime.Now;

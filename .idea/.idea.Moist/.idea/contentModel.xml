@@ -20,8 +20,7 @@
         <e p="Controllers" t="Include">
           <e p="BaseController.cs" t="Include" />
           <e p="HomeController.cs" t="Include" />
-          <e p="SchemasController.cs" t="Include" />
-          <e p="ShopController.cs" t="Include" />
+          <e p="ShopsController.cs" t="Include" />
         </e>
         <e p="Moist.Api.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
@@ -84,14 +83,17 @@
           <e p="RedemptionValidationResult.cs" t="Include" />
           <e p="ValidationResult.cs" t="Include" />
         </e>
+        <e p="DateTimeInfrastructure" t="Include">
+          <e p="CustomDateTime.cs" t="Include" />
+          <e p="IDateTime.cs" t="Include" />
+        </e>
         <e p="Exceptions" t="Include">
           <e p="InvalidRedemptionCode.cs" t="Include" />
         </e>
         <e p="ICodeStore.cs" t="Include" />
-        <e p="IDateTime.cs" t="Include" />
         <e p="IShopStore.cs" t="Include" />
         <e p="IStore.cs" t="Include" />
-        <e p="IUserManager.cs" t="Include" />
+        <e p="IUserStore.cs" t="Include" />
         <e p="Models" t="Include">
           <e p="Code.cs" t="Include" />
           <e p="Customer.cs" t="Include" />
@@ -166,6 +168,7 @@
           <e p="BaseStore.cs" t="Include" />
           <e p="CodeStore.cs" t="Include" />
           <e p="ShopStore.cs" t="Include" />
+          <e p="UserStore.cs" t="Include" />
         </e>
       </e>
       <e p="Moist.IdentityServer" t="IncludeRecursive">
@@ -212,67 +215,8 @@
       </e>
       <e p="Moist.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />
-      <e p="src" t="Include">
-        <e p="api" t="Include" />
-        <e p="clients" t="Include" />
-      </e>
-      <e p="Store" t="IncludeRecursive">
-        <e p="appsettings.Development.json" t="Include" />
-        <e p="appsettings.json" t="Include" />
-        <e p="bin" t="ExcludeRecursive" />
-        <e p="Controllers" t="Include">
-          <e p="Home.cs" t="Include" />
-        </e>
-        <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
-            <e p="netcoreapp3.1" t="Include">
-              <e p="Store.AssemblyInfo.cs" t="Include" />
-              <e p="Store.RazorAssemblyInfo.cs" t="Include" />
-            </e>
-          </e>
-        </e>
-        <e p="Program.cs" t="Include" />
-        <e p="Properties" t="Include">
-          <e p="launchSettings.json" t="Include" />
-        </e>
-        <e p="Startup.cs" t="Include" />
-        <e p="Store.csproj" t="IncludeRecursive" />
-        <e p="Views" t="Include">
-          <e p="Home" t="Include">
-            <e p="Index.cshtml" t="Include" />
-          </e>
-        </e>
-      </e>
+      <e p="src" t="Include" />
       <e p="tests" t="Include" />
-      <e p="User" t="IncludeRecursive">
-        <e p="appsettings.Development.json" t="Include" />
-        <e p="appsettings.json" t="Include" />
-        <e p="bin" t="ExcludeRecursive" />
-        <e p="Controllers" t="Include">
-          <e p="Home.cs" t="Include" />
-        </e>
-        <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
-            <e p="netcoreapp3.1" t="Include">
-              <e p="User.AssemblyInfo.cs" t="Include" />
-              <e p="User.RazorAssemblyInfo.cs" t="Include" />
-            </e>
-          </e>
-        </e>
-        <e p="Program.cs" t="Include" />
-        <e p="Properties" t="Include">
-          <e p="launchSettings.json" t="Include" />
-        </e>
-        <e p="Startup.cs" t="Include" />
-        <e p="User.csproj" t="IncludeRecursive" />
-        <e p="Views" t="Include">
-          <e p="Home" t="Include">
-            <e p="Index.cshtml" t="Include" />
-            <e p="shops.cshtml" t="Include" />
-            <e p="SignIn.cshtml" t="Include" />
-          </e>
-        </e>
-      </e>
     </e>
   </component>
 </project>

@@ -8,7 +8,7 @@ namespace Moist.Application.Services.Schema.Commands
     public class ActivateSchemaCommand : IRequest<Response>
     {
         public string UserId  { get; set; }
-        public int StoreId  { get; set; }
+        public int ShopId  { get; set; }
         public int SchemaId  { get; set; }
     }
 
@@ -22,7 +22,7 @@ namespace Moist.Application.Services.Schema.Commands
         }
         public async Task<Response> Handle(ActivateSchemaCommand request, CancellationToken cancellationToken)
         {
-            if (!await _store.UserCanActivateSchema(request.UserId, request.StoreId))
+            if (!await _store.UserCanActivateSchema(request.UserId, request.ShopId))
             {
                 return Response.Fail("Not Allowed to activate schema");
             }

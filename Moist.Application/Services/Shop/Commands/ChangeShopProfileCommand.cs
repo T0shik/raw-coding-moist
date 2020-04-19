@@ -8,7 +8,7 @@ namespace Moist.Application.Services.Shop.Commands {
     public class ChangeShopProfileCommand : IRequest<Response>
     {
         public string UserId { get; set; }
-        public int Id { get; set; }
+        public int ShopId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }
@@ -23,12 +23,12 @@ namespace Moist.Application.Services.Shop.Commands {
         }
         public async Task<Response> Handle(ChangeShopProfileCommand request, CancellationToken cancellationToken)
         {
-            if (!await _shopStore.UserCanChangeProfile(request.UserId, request.Id))
+            if (!await _shopStore.UserCanChangeProfile(request.UserId, request.ShopId))
             {
                 return Response.Fail("Not allowed to change shop profile");
             }
 
-            var profile = await _shopStore.GetProfile(request.Id);
+            var profile = await _shopStore.GetProfile(request.ShopId);
 
             profile.Name = request.Name;
             profile.Description = request.Description;

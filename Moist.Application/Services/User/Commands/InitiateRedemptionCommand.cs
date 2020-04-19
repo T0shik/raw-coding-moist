@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Moist.Core;
+using Moist.Core.DateTimeInfrastructure;
 using Moist.Core.Schemas;
 
 namespace Moist.Application.Services.User.Commands
@@ -14,18 +15,18 @@ namespace Moist.Application.Services.User.Commands
 
     public class InitiateRedemptionCommandHandler : IRequestHandler<InitiateRedemptionCommand, Response<string>>
     {
-        private readonly IUserManager _userManager;
+        private readonly IUserStore _userStore;
         private readonly IShopStore _shopStore;
         private readonly ICodeStore _codeStore;
         private readonly IDateTime _dateTime;
 
         public InitiateRedemptionCommandHandler(
-            IUserManager userManager,
+            IUserStore userStore,
             IShopStore shopStore,
             ICodeStore codeStore,
             IDateTime dateTime)
         {
-            _userManager = userManager;
+            _userStore = userStore;
             _shopStore = shopStore;
             _codeStore = codeStore;
             _dateTime = dateTime;
@@ -33,7 +34,7 @@ namespace Moist.Application.Services.User.Commands
 
         public async Task<Response<string>> Handle(InitiateRedemptionCommand request, CancellationToken cancellationToken)
         {
-            var progress = await _userManager.GetProgressAsync(request.UserId, request.SchemaId);
+            var progress = await _userStore.GetProgressAsync(request.UserId, request.SchemaId);
 
             var schema = await _shopStore.GetSchema(progress.SchemaId);
             var assignedSchema = SchemaFactory.Resolve(schema);

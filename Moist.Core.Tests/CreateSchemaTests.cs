@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moist.Application;
 using Moist.Application.Services;
+using Moist.Application.Services.Schema.Commands;
 using Moist.Core.Models;
 using Moq;
 using Xunit;
@@ -11,17 +13,17 @@ namespace Moist.Core.Tests
     public class CreateSchemaTests
     {
         private readonly Mock<IShopStore> _shopMock = new Mock<IShopStore>();
-        private readonly CreateSchemaContext _command;
+        private readonly CreateSchemaCommandHandler _handler;
 
         public CreateSchemaTests()
         {
-            _command = new CreateSchemaContext(_shopMock.Object);
+            _handler = new CreateSchemaCommandHandler(_shopMock.Object);
         }
 
         [Fact]
         public async Task SavesDaysVisitedSchema()
         {
-            var form = new CreateSchemaContext.Form
+            var command = new CreateSchemaCommand
             {
                 Type = SchemaType.DaysVisited,
             };
@@ -29,9 +31,9 @@ namespace Moist.Core.Tests
             _shopMock.Setup(x => x.SaveSchema(It.IsAny<Schema>()))
                      .ReturnsAsync(true);
 
-            var result = await _command.Create(form);
+            var result = await _handler.Handle(command, CancellationToken.None);
 
-            True(result);
+            False(result.Error);
             _shopMock.Verify(x => x.SaveSchema(It.IsAny<Schema>()));
         }
     }

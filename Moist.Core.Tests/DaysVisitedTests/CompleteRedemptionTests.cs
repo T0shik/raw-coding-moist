@@ -1,8 +1,11 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Moist.Application;
 using Moist.Application.Services;
+using Moist.Application.Services.Shop.Commands;
 using Moist.Core.Code;
+using Moist.Core.DateTimeInfrastructure;
 using Moist.Core.Exceptions;
 using Moist.Core.Models;
 using Moq;
@@ -14,25 +17,33 @@ namespace Moist.Core.Tests.DaysVisitedTests
     public class CompleteRedemptionTests
     {
         private readonly Mock<ICodeStore> _codeMock = new Mock<ICodeStore>();
-        private readonly Mock<IUserManager> _userMock = new Mock<IUserManager>();
-        private readonly Mock<IShopStore> _shopMock = new Mock<IShopStore>();
+        private readonly Mock<IUserStore> _userMock = new Mock<IUserStore>();
         private readonly Mock<IDateTime> _dateMock = new Mock<IDateTime>();
-        private readonly CompleteRedemption _context;
+        private readonly CompleteRedemptionCommandHandler _handler;
 
         public CompleteRedemptionTests()
         {
-            _context = new CompleteRedemption(_shopMock.Object, _userMock.Object, _codeMock.Object, _dateMock.Object);
+            _handler = new CompleteRedemptionCommandHandler(_userMock.Object, _codeMock.Object, _dateMock.Object);
         }
 
+        private CompleteRedemptionCommand Command(int shopId, string code) =>
+            new CompleteRedemptionCommand
+            {
+                ShopId = shopId,
+                Code = code
+            };
+
         [Fact]
-        public Task ThrowsWhenCodeInvalid()
+        public async Task ThrowsWhenCodeInvalid()
         {
             var shopId = 1;
             var code = Guid.NewGuid().ToString();
             var validationResult = new RedemptionValidationResult {Success = false};
             _codeMock.Setup(x => x.ValidateRedemptionCode(shopId, code)).ReturnsAsync(validationResult);
 
-            return ThrowsAsync<InvalidRedemptionCode>(() => _context.Complete(shopId, code));
+            var response = await _handler.Handle(Command(shopId, code), CancellationToken.None);
+
+            True(response.Error);
         }
 
         [Fact]
@@ -53,9 +64,9 @@ namespace Moist.Core.Tests.DaysVisitedTests
             _userMock.Setup(x => x.GetProgressAsync("customer", 1)).ReturnsAsync(progress);
             _dateMock.Setup(x => x.Now).Returns(date);
 
-            var result = await _context.Complete(shopId, code);
+            var result = await _handler.Handle(Command(shopId, code), CancellationToken.None);
 
-            True(result);
+            False(result.Error);
             True(progress.Completed);
             Equal(date, progress.CompletedOn);
         }

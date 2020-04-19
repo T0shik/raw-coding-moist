@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moist.Application;
 using Moist.Application.Services;
+using Moist.Application.Services.Schema.Commands;
 using Moist.Core.Models;
 using Moq;
 using Xunit;
@@ -11,9 +13,14 @@ namespace Moist.Core.Tests
     public class CloseSchemaTests
     {
         private readonly Mock<IShopStore> _shopMock = new Mock<IShopStore>();
-        private readonly CloseSchemaContext _context;
+        private readonly CloseSchemaCommandHandler _handler;
         private const int c_shopId = 1;
         private const int c_schemaId = 1;
+
+        public CloseSchemaTests()
+        {
+            _handler = new CloseSchemaCommandHandler(_shopMock.Object);
+        }
 
         private Schema CreateMockSchema() =>
             new Schema
@@ -22,10 +29,7 @@ namespace Moist.Core.Tests
                 Activate = true
             };
 
-        public CloseSchemaTests()
-        {
-            _context = new CloseSchemaContext(_shopMock.Object);
-        }
+        private CloseSchemaCommand Command => new CloseSchemaCommand {ShopId = c_shopId, SchemaId = c_schemaId};
 
         [Fact]
         public async Task SetsEnableFlagToFalse_WhenSchemaBelongsToShop()
@@ -33,23 +37,21 @@ namespace Moist.Core.Tests
             var mockSchema = CreateMockSchema();
             mockSchema.ShopId = c_shopId;
             _shopMock.Setup(x => x.GetSchema(c_schemaId)).ReturnsAsync(mockSchema);
-            
-            var result = await _context.Close(c_shopId, c_schemaId);
-            
-            True(result);
+
+            var result = await _handler.Handle(Command, CancellationToken.None);
+
+            False(result.Error);
             True(mockSchema.Closed);
             False(mockSchema.Activate);
         }
-        
+
         [Fact]
         public async Task ReturnsFalseWhenSchemaNotOwnedByShop()
         {
             var mockSchema = CreateMockSchema();
             _shopMock.Setup(x => x.GetSchema(c_schemaId)).ReturnsAsync(mockSchema);
-            
-            var result = await _context.Close(2, c_schemaId);
-            
-            False(result);
+            var result = await _handler.Handle(Command, CancellationToken.None);
+            True(result.Error);
             True(mockSchema.Activate);
         }
     }

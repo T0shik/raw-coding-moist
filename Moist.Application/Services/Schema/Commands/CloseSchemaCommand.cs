@@ -24,6 +24,8 @@ namespace Moist.Application.Services.Schema.Commands
         {
             var schema = await _shopStore.GetSchema(request.SchemaId);
 
+            // todo validate if user allowed to close schema
+
             if (schema.ShopId != request.ShopId)
             {
                 return Response.Fail("Invalid Schema");

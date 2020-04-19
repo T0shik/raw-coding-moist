@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moist.Application;
 using Moist.Application.Services;
+using Moist.Application.Services.Shop.Commands;
 using Moist.Core.Code;
+using Moist.Core.DateTimeInfrastructure;
 using Moist.Core.Models;
 using Moq;
 using Xunit;
@@ -13,11 +16,11 @@ namespace Moist.Core.Tests.DaysVisitedTests
 {
     public class RewardCustomerTests
     {
-        private readonly Mock<IUserManager> _userMock = new Mock<IUserManager>();
+        private readonly Mock<IUserStore> _userMock = new Mock<IUserStore>();
         private readonly Mock<IShopStore> _shopMock = new Mock<IShopStore>();
         private readonly Mock<IDateTime> _dateMock = new Mock<IDateTime>();
         private readonly Mock<ICodeStore> _codeMock = new Mock<ICodeStore>();
-        private readonly RewardCustomer _context;
+        private readonly RewardCustomerCommandHandler _context;
 
         private static SchemaProgress Progress =>
             new SchemaProgress
@@ -35,9 +38,16 @@ namespace Moist.Core.Tests.DaysVisitedTests
                 Perpetual = true
             };
 
+        private static RewardCustomerCommand Command(
+            string userId = "customer",
+            int schemaId = 1,
+            string code = "code") =>
+            new RewardCustomerCommand {UserId = userId, SchemaId = schemaId, Code = code};
+
         public RewardCustomerTests()
         {
-            _context = new RewardCustomer(_shopMock.Object, _userMock.Object, _codeMock.Object, _dateMock.Object);
+            _context = new RewardCustomerCommandHandler(_shopMock.Object, _userMock.Object, _codeMock.Object,
+                                                        _dateMock.Object);
         }
 
         [Fact]
@@ -47,11 +57,11 @@ namespace Moist.Core.Tests.DaysVisitedTests
             _shopMock.Setup(x => x.GetSchema(1)).ReturnsAsync(Config);
             _userMock.Setup(x => x.GetProgressAsync("customer", 1))
                      .ReturnsAsync(progress);
-            _codeMock.Setup(x => x.ValidateRewardCode(1, "code")).ReturnsAsync(new ValidationResult { Success = true});
+            _codeMock.Setup(x => x.ValidateRewardCode(1, "code")).ReturnsAsync(new ValidationResult {Success = true});
 
-            var success = await _context.Reward("customer", 1, "code");
+            var response = await _context.Handle(Command(), CancellationToken.None);
 
-            True(success);
+            False(response.Error);
             Equal(1, progress.Progress);
         }
 
@@ -64,7 +74,7 @@ namespace Moist.Core.Tests.DaysVisitedTests
 
         [Theory]
         [MemberData(nameof(InvalidDates))]
-        public Task Throws_WhenWhenOutsideValidityDate(DateTime currentTime)
+        public async Task Throws_WhenWhenOutsideValidityDate(DateTime currentTime)
         {
             var config = Config;
             config.Perpetual = false;
@@ -74,17 +84,21 @@ namespace Moist.Core.Tests.DaysVisitedTests
             _userMock.Setup(x => x.GetProgressAsync("customer", 1)).ReturnsAsync(Progress);
             _dateMock.Setup(x => x.Now).Returns(currentTime);
 
-            return ThrowsAsync<Exception>(() => _context.Reward("customer", 1, "code"));
+            var response = await _context.Handle(Command(), CancellationToken.None);
+
+            True(response.Error);
         }
 
         [Fact]
-        public Task Throws_WhenInvalidCode()
+        public async Task Throws_WhenInvalidCode()
         {
             _shopMock.Setup(x => x.GetSchema(1)).ReturnsAsync(Config);
             _userMock.Setup(x => x.GetProgressAsync("customer", 1)).ReturnsAsync(Progress);
-            _codeMock.Setup(x => x.ValidateRewardCode(1, "code")).ReturnsAsync(new ValidationResult { Success = false});
+            _codeMock.Setup(x => x.ValidateRewardCode(1, "code")).ReturnsAsync(new ValidationResult {Success = false});
 
-            return ThrowsAsync<Exception>(() => _context.Reward("customer", 1, "code"));
+            var response = await _context.Handle(Command(), CancellationToken.None);
+
+            True(response.Error);
         }
     }
 }

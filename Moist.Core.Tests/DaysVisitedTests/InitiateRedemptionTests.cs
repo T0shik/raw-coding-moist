@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moist.Application;
 using Moist.Application.Services;
+using Moist.Application.Services.User.Commands;
 using Moist.Core.Code;
+using Moist.Core.DateTimeInfrastructure;
 using Moist.Core.Models;
 using Moq;
 using Xunit;
+using static Xunit.Assert;
 
 namespace Moist.Core.Tests.DaysVisitedTests
 {
     public class InitiateRedemptionTests
     {
         private readonly Mock<ICodeStore> _codeMock = new Mock<ICodeStore>();
-        private readonly Mock<IUserManager> _userMock = new Mock<IUserManager>();
+        private readonly Mock<IUserStore> _userMock = new Mock<IUserStore>();
         private readonly Mock<IShopStore> _shopMock = new Mock<IShopStore>();
         private readonly Mock<IDateTime> _dateMock = new Mock<IDateTime>();
-        private readonly InitiateRedemption _context;
+        private readonly InitiateRedemptionCommandHandler _handler;
 
         private static SchemaProgress Progress =>
             new SchemaProgress
@@ -32,12 +36,16 @@ namespace Moist.Core.Tests.DaysVisitedTests
                 Goal = 6,
                 Perpetual = true
             };
-        
+
         public InitiateRedemptionTests()
         {
-            _context = new InitiateRedemption(_userMock.Object, _shopMock.Object, _codeMock.Object, _dateMock.Object);
+            _handler = new InitiateRedemptionCommandHandler(_userMock.Object, _shopMock.Object, _codeMock.Object,
+                                                            _dateMock.Object);
         }
-        
+
+        private static InitiateRedemptionCommand Command(string userId = "customer", int schemaId = 1) =>
+            new InitiateRedemptionCommand {UserId = userId, SchemaId = schemaId};
+
         [Fact]
         public async Task InitiateRedemption_ReturnsUniqueCode()
         {
@@ -46,20 +54,22 @@ namespace Moist.Core.Tests.DaysVisitedTests
             _shopMock.Setup(x => x.GetSchema(1)).ReturnsAsync(Config);
             _codeMock.Setup(x => x.CreateRedemptionCode()).ReturnsAsync(code);
 
-            var generatedCode = await _context.Redeem("customer", 1);
+            var response = await _handler.Handle(Command(), CancellationToken.None);
 
-            Assert.Equal(code, generatedCode);
+            Equal(code, response.Data);
         }
-        
-          [Fact]
-        public Task InitiateRedemption_ThrowsWhenRequirementsNoMet()
+
+        [Fact]
+        public async Task InitiateRedemption_ThrowsWhenRequirementsNoMet()
         {
             var progress = Progress;
             progress.Progress = 5;
             _userMock.Setup(x => x.GetProgressAsync("customer", 1)).ReturnsAsync(progress);
             _shopMock.Setup(x => x.GetSchema(1)).ReturnsAsync(Config);
 
-            return Assert.ThrowsAsync<Exception>(() => _context.Redeem("customer", 1));
+            var response = await _handler.Handle(Command(), CancellationToken.None);
+
+            True(response.Error);
         }
 
         [Fact]
@@ -72,9 +82,9 @@ namespace Moist.Core.Tests.DaysVisitedTests
             _shopMock.Setup(x => x.GetSchema(1)).ReturnsAsync(config);
             _codeMock.Setup(x => x.CreateRedemptionCode()).ReturnsAsync(code);
 
-            var result = await _context.Redeem("customer", 1);
+            var response = await _handler.Handle(Command(), CancellationToken.None);
 
-            Assert.Equal(code, result);
+            Equal(code, response.Data);
         }
 
         public static IEnumerable<object[]> InvalidDates =>
@@ -86,7 +96,7 @@ namespace Moist.Core.Tests.DaysVisitedTests
 
         [Theory]
         [MemberData(nameof(InvalidDates))]
-        public Task InitiateRedemption_ThrowWhenOutsideValidityDate(DateTime currentTime)
+        public async Task InitiateRedemption_ThrowWhenOutsideValidityDate(DateTime currentTime)
         {
             var config = Config;
             config.Perpetual = false;
@@ -98,7 +108,9 @@ namespace Moist.Core.Tests.DaysVisitedTests
             _codeMock.Setup(x => x.CreateRedemptionCode()).ReturnsAsync(code);
             _dateMock.Setup(x => x.Now).Returns(currentTime);
 
-            return Assert.ThrowsAsync<Exception>(() => _context.Redeem("customer", 1));
+            var response = await _handler.Handle(Command(), CancellationToken.None);
+
+            True(response.Error);
         }
     }
 }

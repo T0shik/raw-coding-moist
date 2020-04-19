@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Moist.Core;
+using Moist.Core.DateTimeInfrastructure;
 using Moist.Core.Models;
 using Moist.Core.Schemas;
 
@@ -16,16 +17,16 @@ namespace Moist.Application.Services.User.Commands
     public class JoinSchemaCommandHandler : IRequestHandler<JoinSchemaCommand, Response<SchemaProgress>>
     {
         private readonly IShopStore _shopStore;
-        private readonly IUserManager _userManager;
+        private readonly IUserStore _userStore;
         private readonly IDateTime _dateTime;
 
         public JoinSchemaCommandHandler(
             IShopStore shopStore,
-            IUserManager userManager,
+            IUserStore userStore,
             IDateTime dateTime)
         {
             _shopStore = shopStore;
-            _userManager = userManager;
+            _userStore = userStore;
             _dateTime = dateTime;
         }
 
@@ -39,12 +40,12 @@ namespace Moist.Application.Services.User.Commands
                 return Response.Fail<SchemaProgress>(null,  "Schema not valid");
             }
 
-            if (await _userManager.InSchemaAsync(request.UserId, request.SchemaId))
+            if (await _userStore.InSchemaAsync(request.UserId, request.SchemaId))
             {
                 return Response.Fail<SchemaProgress>(null,  "Schema already joined");
             }
 
-            var progress = await _userManager.CreateSchemaProgressAsync(request.UserId, request.SchemaId);
+            var progress = await _userStore.CreateSchemaProgressAsync(request.UserId, request.SchemaId);
             return Response.Ok(progress, "Schema Joined");
         }
     }

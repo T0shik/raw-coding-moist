@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Moist.Application;
 using Moist.Application.Services;
+using Moist.Application.Services.User.Commands;
+using Moist.Core.DateTimeInfrastructure;
 using Moist.Core.Models;
 using Moq;
 using Xunit;
@@ -11,14 +14,14 @@ namespace Moist.Core.Tests
 {
     public class JoinSchemaTests
     {
-        private readonly Mock<IUserManager> _userMock = new Mock<IUserManager>();
+        private readonly Mock<IUserStore> _userMock = new Mock<IUserStore>();
         private readonly Mock<IShopStore> _shopMock = new Mock<IShopStore>();
         private readonly Mock<IDateTime> _dateMock = new Mock<IDateTime>();
-        private readonly JoinSchema _context;
+        private readonly JoinSchemaCommandHandler _handler;
 
         public JoinSchemaTests()
         {
-            _context = new JoinSchema(_shopMock.Object, _userMock.Object, _dateMock.Object);
+            _handler = new JoinSchemaCommandHandler(_shopMock.Object, _userMock.Object, _dateMock.Object);
         }
 
         private static Schema Config =>
@@ -29,8 +32,11 @@ namespace Moist.Core.Tests
                 Perpetual = true
             };
 
+        private static JoinSchemaCommand Command(string userId = "customer", int schemaId = 1) =>
+            new JoinSchemaCommand {UserId = userId, SchemaId = schemaId};
+
         [Fact]
-        public Task Throws_WhenSchemaNotValid()
+        public async Task Throws_WhenSchemaNotValid()
         {
             var currentTime = DateTime.Now;
             var config = Config;
@@ -40,15 +46,20 @@ namespace Moist.Core.Tests
             _shopMock.Setup(x => x.GetSchema(1)).ReturnsAsync(config);
             _dateMock.Setup(x => x.Now).Returns(currentTime);
 
-            return ThrowsAsync<Exception>(() => _context.Join("customer", 1));
+            var response = await _handler.Handle(Command(), CancellationToken.None);
+
+            True(response.Error);
         }
 
         [Fact]
-        public Task Throws_WhenUserAlreadyJoinedSchema()
+        public async Task FalseResponse_WhenUserAlreadyJoinedSchema()
         {
             _shopMock.Setup(x => x.GetSchema(1)).ReturnsAsync(Config);
             _userMock.Setup(x => x.InSchemaAsync("customer", 1)).ReturnsAsync(true);
-            return ThrowsAsync<Exception>(() => _context.Join("customer", 1));
+
+            var response = await _handler.Handle(Command(), CancellationToken.None);
+
+            True(response.Error);
         }
 
         [Fact]
@@ -63,7 +74,8 @@ namespace Moist.Core.Tests
             _userMock.Setup(x => x.InSchemaAsync("customer", 1)).ReturnsAsync(false);
             _userMock.Setup(x => x.CreateSchemaProgressAsync("customer", 1)).ReturnsAsync(progress);
 
-            var savedProgress = await _context.Join("customer", 1);
+            var response = await _handler.Handle(Command(), CancellationToken.None);
+            var savedProgress = response.Data;
 
             Equal("customer", savedProgress.CustomerId);
             Equal(1, savedProgress.SchemaId);

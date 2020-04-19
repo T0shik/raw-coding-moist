@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using MediatR;
 using Moist.Core;
 
-namespace Moist.Application.Services.Shop.Commands {
-    public class InitialiseShopCommand : IRequest<bool>
+namespace Moist.Application.Services.Shop.Commands
+{
+    public class InitialiseShopCommand : IRequest<Response>
     {
         public string UserId { get; set; }
     }
-    public class InitialiseShopCommandHandler : IRequestHandler<InitialiseShopCommand, bool>
+
+    public class InitialiseShopCommandHandler : IRequestHandler<InitialiseShopCommand, Response>
     {
         private readonly IShopStore _shopStore;
 
@@ -17,9 +19,11 @@ namespace Moist.Application.Services.Shop.Commands {
             _shopStore = shopStore;
         }
 
-        public async Task<bool> Handle(InitialiseShopCommand request, CancellationToken cancellationToken)
+        public async Task<Response> Handle(InitialiseShopCommand request, CancellationToken cancellationToken)
         {
-            return await _shopStore.CreateShopForUser(request.UserId);
+            return await _shopStore.CreateShopForUser(request.UserId)
+                       ? Response.Ok("Shop Initialised")
+                       : Response.Fail("Failed to Initialise shop");
         }
     }
 }

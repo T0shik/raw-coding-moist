@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Moist.Application;
 using Moist.Application.Services;
+using Moist.Application.Services.Shop.Commands;
 using Moist.Core.Models;
 using Moq;
 using Xunit;
@@ -12,23 +14,24 @@ namespace Moist.Core.Tests
     public class ChangeShopProfileContextTests
     {
         private readonly Mock<IShopStore> _shopMock = new Mock<IShopStore>();
-        private readonly ChangeShopProfileContext _context;
+        private readonly ChangeShopProfileCommandHandler _handler;
         private const int c_shopId = 1;
         private const string c_userId = "userId";
 
-        private static ChangeShopProfileContext.Form NewForm =>
-            new ChangeShopProfileContext.Form
-            {
-                UserId = c_userId,
-                Id = c_shopId,
-                Name = "Shop Name",
-                Description = "Shop Description"
-            };
 
         public ChangeShopProfileContextTests()
         {
-            _context = new ChangeShopProfileContext(_shopMock.Object);
+            _handler = new ChangeShopProfileCommandHandler(_shopMock.Object);
         }
+
+        private static ChangeShopProfileCommand NewForm =>
+            new ChangeShopProfileCommand
+            {
+                UserId = c_userId,
+                ShopId = c_shopId,
+                Name = "Shop Name",
+                Description = "Shop Description"
+            };
 
         [Fact]
         public async Task ReturnsFalseWhen_InvalidUser()
@@ -36,9 +39,9 @@ namespace Moist.Core.Tests
             var userId = Guid.NewGuid().ToString();
             _shopMock.Setup(x => x.UserCanChangeProfile(userId, c_shopId)).ReturnsAsync(false);
 
-            var result = await _context.Change(NewForm);
+            var response = await _handler.Handle(NewForm, CancellationToken.None);
 
-            False(result);
+            True(response.Error);
         }
 
         [Fact]
@@ -48,9 +51,9 @@ namespace Moist.Core.Tests
             _shopMock.Setup(x => x.GetProfile(c_shopId)).ReturnsAsync(mock);
             _shopMock.Setup(x => x.UserCanChangeProfile(c_userId, c_shopId)).ReturnsAsync(true);
 
-            var result = await _context.Change(NewForm);
+            var result = await _handler.Handle(NewForm, CancellationToken.None);
 
-            True(result);
+            False(result.Error);
             Equal(NewForm.Name, mock.Name);
             Equal(NewForm.Description, mock.Description);
         }
