@@ -7,11 +7,11 @@
     <e p="C:\Users\Toshik\.nuget\packages\xunit.runner.visualstudio\2.4.0\build\netcoreapp1.0\xunit.runner.reporters.netcoreapp10.dll" t="Include" />
     <e p="C:\Users\Toshik\.nuget\packages\xunit.runner.visualstudio\2.4.0\build\netcoreapp1.0\xunit.runner.utility.netcoreapp10.dll" t="Include" />
     <e p="C:\Users\Toshik\.nuget\packages\xunit.runner.visualstudio\2.4.0\build\netcoreapp1.0\xunit.runner.visualstudio.dotnetcore.testadapter.dll" t="Include" />
-    <e p="C:\Users\Toshik\.Rider2019.3\config\consoles\db" t="IncludeRecursive" />
-    <e p="C:\Users\Toshik\.Rider2019.3\config\extensions" t="IncludeRecursive" />
-    <e p="C:\Users\Toshik\.Rider2019.3\config\scratches" t="IncludeRecursive" />
-    <e p="C:\Users\Toshik\.Rider2019.3\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Toshik\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_Moist.-476835540.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Toshik\AppData\local\JetBrains\Rider2020.1\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Toshik\AppData\local\JetBrains\Rider2020.1\resharper-host\local\Transient\ReSharperHost\v201\SolutionCaches\_Moist.-476835540.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Toshik\AppData\Roaming\JetBrains\Rider2020.1\consoles\db" t="IncludeRecursive" />
+    <e p="C:\Users\Toshik\AppData\Roaming\JetBrains\Rider2020.1\extensions" t="IncludeRecursive" />
+    <e p="C:\Users\Toshik\AppData\Roaming\JetBrains\Rider2020.1\scratches" t="IncludeRecursive" />
     <e p="D:\WS\Rider\Moist" t="IncludeFlat">
       <e p="Moist.Api" t="IncludeRecursive">
         <e p="appsettings.Development.json" t="Include" />
@@ -215,7 +215,9 @@
       </e>
       <e p="Moist.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />
-      <e p="src" t="Include" />
+      <e p="src" t="Include">
+        <e p="clients" t="Include" />
+      </e>
       <e p="tests" t="Include" />
     </e>
   </component>

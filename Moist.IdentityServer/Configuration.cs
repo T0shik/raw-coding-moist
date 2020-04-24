@@ -43,6 +43,28 @@ namespace Moist.IdentityServer
                     RequirePkce = true,
                     RequireClientSecret = false,
                     RequireConsent = false,
+                },
+
+                new Client
+                {
+                    ClientId = "flutter_shop",
+                    ClientSecrets = { new Secret("client_secret".ToSha256()) },
+
+                    AllowedGrantTypes = GrantTypes.Code,
+
+                    RedirectUris = {"http://localhost:4000/"},
+                    AllowedCorsOrigins = {"http://localhost:4000"},
+
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        "user-api",
+                    },
+
+                    AllowAccessTokensViaBrowser = true,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
+                    RequireConsent = false,
                 }
             };
     }
