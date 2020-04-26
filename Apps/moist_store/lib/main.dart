@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:io';
 
 void main() => runApp(MyApp());
 
@@ -29,44 +30,44 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  Credential cred;
 
   _auth() async {
-    var uri = new Uri(host: "10.0.2.2", port: 5004, scheme: "http");
+    var uri = new Uri(host: "192.168.1.107", port: 8004, scheme: "http");
     var clientId = "flutter_shop";
     var issuer = await Issuer.discover(uri);
     var client = new Client(issuer, clientId);
-    
-    // create a function to open a browser with an url
+
     urlLauncher(String url) async {
-        if (await canLaunch(url)) {
-          await launch(url, forceWebView: true);
-        } else {
-          throw 'Could not launch $url';
-        }
+      if (await canLaunch(url)) {
+        await launch(url, forceWebView: true);
+      } else {
+        throw 'Could not launch $url';
+      }
     }
-    
-    // create an authenticator
+
     var authenticator = new Authenticator(client,
-        scopes: ['user-api'],
-        port: 4000, urlLancher: urlLauncher);
-    
-    // starts the authentication
-    var c = await authenticator.authorize();
-    
-    // close the webview when finished
+        scopes: ['user-api'], port: 4000, urlLancher: urlLauncher);
+
+    cred = await authenticator.authorize();
     closeWebView();
-    
-    // return the user info
-    var userInfo = await c.getUserInfo();
+
+    var userInfo = await cred.getUserInfo();
 
     return userInfo;
+  }
+
+  _apiCall() async {
+    var client = http.Client();
+
+    var rezi = await cred.getTokenResponse();
+    
+    var accessToken = rezi.accessToken;
+    
+    var response = await client.get(
+      "http://10.0.2.2:5001/home/secure", 
+      headers: {HttpHeaders.authorizationHeader: "Bearer $accessToken"},);
+    var a = response.body;
   }
 
   @override
@@ -82,10 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
+            OutlineButton(child: Text("Oi"), onPressed: _apiCall),
           ],
         ),
       ),

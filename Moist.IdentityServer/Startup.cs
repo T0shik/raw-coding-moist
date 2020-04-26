@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,19 +29,19 @@ namespace Moist.IdentityServer
 
             // AddIdentity registers the services
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-            {
-                if (_env.IsDevelopment())
-                {
-                    options.Password.RequireDigit = false;
-                    options.Password.RequiredLength = 1;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequiredUniqueChars = 1;
-                }
-            })
-                .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
+                    {
+                        if (_env.IsDevelopment())
+                        {
+                            options.Password.RequireDigit = false;
+                            options.Password.RequiredLength = 1;
+                            options.Password.RequireLowercase = false;
+                            options.Password.RequireUppercase = false;
+                            options.Password.RequireNonAlphanumeric = false;
+                            options.Password.RequiredUniqueChars = 1;
+                        }
+                    })
+                    .AddEntityFrameworkStores<AppDbContext>()
+                    .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(config =>
             {
@@ -70,10 +71,12 @@ namespace Moist.IdentityServer
 
             app.UseIdentityServer();
 
-            app.UseEndpoints(endpoints =>
+            if (_env.IsDevelopment())
             {
-                endpoints.MapDefaultControllerRoute();
-            });
+                app.UseCookiePolicy(new CookiePolicyOptions {MinimumSameSitePolicy = SameSiteMode.Lax});
+            }
+
+            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
         }
     }
 }

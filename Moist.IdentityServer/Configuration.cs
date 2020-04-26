@@ -16,7 +16,7 @@ namespace Moist.IdentityServer
         public static IEnumerable<ApiResource> GetApis() =>
             new List<ApiResource>
             {
-                new ApiResource("user-api"),
+                new ApiResource("user-api")
             };
 
         public static IEnumerable<Client> GetClients() =>
