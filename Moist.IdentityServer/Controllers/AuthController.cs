@@ -94,7 +94,7 @@ namespace Moist.IdentityServer.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ExternalLogin(string provider, string returnUrl)
+        public IActionResult ExternalLogin(string provider, string returnUrl)
         {
             var redirectUri = Url.Action(nameof(ExteranlLoginCallback), "Auth", new { returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUri);
