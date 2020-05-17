@@ -1,40 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moist_store/main.dart';
-import 'package:openid_client/openid_client.dart';
-import 'package:openid_client/openid_client_io.dart';
+import 'package:moist_store/services/authentication_provider.dart';
+import 'package:moist_store/services/moist_client.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key key}) : super(key: key);
 
-  void _auth(BuildContext context, AuthenticationProvider provider) async {
-    var uri = new Uri(host: "192.168.1.107", port: 8004, scheme: "http");
-    var clientId = "flutter_shop";
-    var issuer = await Issuer.discover(uri);
-    var client = new Client(issuer, clientId);
+  void _auth(BuildContext context) async {
+    var auth = context.read<AuthenticationProvider>();
+    var api = context.read<MoistClient>();
 
-    urlLauncher(String url) async {
-      if (await canLaunch(url)) {
-        await launch(url, forceWebView: true);
-      } else {
-        throw 'Could not launch $url';
-      }
+    var result = await auth.authenticate();
+
+    if(result){
+      var result = await api.initShop();
+      print("-- Response after authentication --");
+      print(result.body);
     }
 
-    var authenticator = new Authenticator(client,
-        scopes: ['user-api'], port: 4000, urlLancher: urlLauncher);
-
-    var cred = await authenticator.authorize();
-    closeWebView();
-    await provider.setCredentials(cred);
-    Navigator.pushNamed(context, '/dashboard');
+    Navigator.pushReplacementNamed(context, '/dashboard');
   }
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<AuthenticationProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +31,7 @@ class LoginPage extends StatelessWidget {
       ),
       body: Center(
         child: RaisedButton(
-          onPressed: () => _auth(context, provider),
+          onPressed: () => _auth(context),
           child: Text('Login'),
         ),
       ),

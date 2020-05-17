@@ -33,7 +33,7 @@ namespace Moist.Application.Api.Controllers
             return Mediator.Send(command);
         }
 
-        public Task<Core.Models.Shop> Index()
+        public Task<Shop> Index()
         {
             return Mediator.Send(new GetProfileQuery());
         }
@@ -69,10 +69,10 @@ namespace Moist.Application.Api.Controllers
             return Mediator.Send(command);
         }
 
-        [HttpPost("{shopId}")]
-        public Task<Response> InitialiseShop([FromBody] InitialiseShopCommand command)
+        [HttpPost]
+        public Task<Response> InitialiseShop()
         {
-            return Mediator.Send(command);
+            return Mediator.Send(new InitialiseShopCommand());
         }
 
         [HttpPost("{shopId}/schemas/{schemaId}")]

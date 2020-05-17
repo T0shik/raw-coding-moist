@@ -3,9 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:moist_store/services/moist_client.dart';
 import 'package:provider/provider.dart';
-
-import '../main.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -16,20 +15,14 @@ class DashState extends State<Dashboard> {
 
   String _response = "Empty";
 
-  _apiCall(String accessToken) async {
-    var client = http.Client();
-
-    var response = await client.get(
-      "http://192.168.1.107:8005/home/secure",
-      headers: {HttpHeaders.authorizationHeader: "Bearer $accessToken"},
-    );
-
+  _apiCall(MoistClient client) async {
+    var response = await client.test();
     setState(() => _response = response.body);
   }
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<AuthenticationProvider>(context);
+    var client = context.select((MoistClient client) => client);
 
     return Scaffold(
       appBar: AppBar(
@@ -41,7 +34,11 @@ class DashState extends State<Dashboard> {
             Text(_response),
             MaterialButton(
               child: Text("Call Api"),
-              onPressed: () => _apiCall(provider.getAccessToken()),
+              onPressed: () => _apiCall(client),
+            ),
+            MaterialButton(
+              child: Text("Create Profile"),
+              onPressed: () => Navigator.pushNamed(context, "/profile/create"),
             )
           ],
         ),

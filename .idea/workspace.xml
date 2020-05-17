@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a15257bd-66aa-4dff-b9af-9da8b5c17c60" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Moist.IdentityServer/Controllers/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Moist.IdentityServer/Controllers/AuthController.cs" afterDir="false" />
-    </list>
+    <list default="true" id="a15257bd-66aa-4dff-b9af-9da8b5c17c60" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,7 +13,7 @@
   </component>
   <component name="ProjectId" id="1bBl3YKifJq8D5F3vdXqsjr95S3" />
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Apps/moist_store" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
@@ -49,7 +47,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

@@ -31,7 +31,7 @@ namespace Moist.Application.Api
             services.AddAuthentication("Bearer")
                     .AddJwtBearer("Bearer", config =>
                     {
-                        config.Authority = "http://192.168.1.107:8004";
+                        config.Authority = "http://192.168.1.100:8004";
                         config.Audience = "user-api";
                         config.RequireHttpsMetadata = false;
                     });
