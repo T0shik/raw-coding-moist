@@ -3,19 +3,18 @@ using System.Threading.Tasks;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Moist.Database;
 
 namespace Moist.IdentityServer.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly IIdentityServerInteractionService _interactionService;
 
         public AuthController(
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
             IIdentityServerInteractionService interactionService)
         {
             _signInManager = signInManager;
@@ -81,7 +80,7 @@ namespace Moist.IdentityServer.Controllers
                 return View(vm);
             }
 
-            var user = new ApplicationUser(vm.Username);
+            var user = new IdentityUser(vm.Username);
             var result = await _userManager.CreateAsync(user, vm.Password);
 
             if (result.Succeeded)
@@ -133,7 +132,7 @@ namespace Moist.IdentityServer.Controllers
                 return RedirectToAction("Login");
             }
 
-            var user = new ApplicationUser(vm.Username);
+            var user = new IdentityUser(vm.Username);
             var result = await _userManager.CreateAsync(user);
 
             if (!result.Succeeded)

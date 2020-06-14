@@ -16,7 +16,7 @@ namespace Moist.IdentityServer
         public static IEnumerable<ApiResource> GetApis() =>
             new List<ApiResource>
             {
-                new ApiResource("user-api")
+                new ApiResource("user_api")
             };
 
         public static IEnumerable<Client> GetClients() =>
@@ -36,7 +36,7 @@ namespace Moist.IdentityServer
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        "user-api",
+                        "user_api",
                     },
 
                     AllowAccessTokensViaBrowser = true,
@@ -58,9 +58,10 @@ namespace Moist.IdentityServer
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        "user-api",
+                        "user_api",
                     },
 
+                    AllowOfflineAccess = true,
                     AllowAccessTokensViaBrowser = true,
                     RequirePkce = true,
                     RequireClientSecret = false,

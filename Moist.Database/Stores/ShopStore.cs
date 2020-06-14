@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -21,13 +20,7 @@ namespace Moist.Database.Stores
             return Db.Shops.Select(selector).AsAsyncEnumerable();
         }
 
-        public Task<int> GetUsersShopId(string userId)
-        {
-            return Db.Employees
-                     .Where(x => x.UserId == userId)
-                     .Select(x => x.ShopId)
-                     .FirstOrDefaultAsync();
-        }
+
 
         public Task<Schema> GetSchema(int schemaId)
         {
@@ -44,7 +37,7 @@ namespace Moist.Database.Stores
 
         public async Task<List<Schema>> GetSchemas(string userId)
         {
-            var storeId = await GetUsersShopId(userId);
+            var storeId = await Db.GetUsersShopId(userId);
 
             var schemas = await Db.Schemas
                                   .Where(x => x.Id == storeId)
@@ -55,39 +48,9 @@ namespace Moist.Database.Stores
 
         public Task<bool> SaveSchema(Schema schema)
         {
-            Db.Schemas.Add(schema);
             return Save();
         }
 
-        public Task<bool> CreateShopForUser(string userId)
-        {
-            var shop = new Shop();
-            shop.Employees.Add(new Employee
-            {
-                UserId = userId,
-                CanChangeProfile = true,
-                CanActivateSchema = true,
-                CanGenerateSchemaCode = true,
-            });
-
-            Db.Shops.Add(shop);
-            return Save();
-        }
-
-        public Task<Shop> GetProfile(int shopId)
-        {
-            return Db.Shops.FirstOrDefaultAsync(x => x.Id == shopId);
-        }
-
-        public Task<T> GetProfile<T>(string userId, Expression<Func<Shop, T>> selector)
-        {
-            return Db.Employees
-                     .Include(x => x.Shop)
-                     .Where(x => x.UserId == userId)
-                     .Select(x => x.Shop)
-                     .Select(selector)
-                     .FirstOrDefaultAsync();
-        }
 
         public Task<bool> UserCanGenerateSchemaCode(string userId, int storeId)
         {
@@ -95,14 +58,6 @@ namespace Moist.Database.Stores
             return Db.Employees
                      .Where(x => x.UserId == userId && x.ShopId == storeId)
                      .Select(x => x.CanGenerateSchemaCode)
-                     .FirstOrDefaultAsync();
-        }
-
-        public Task<bool> UserCanChangeProfile(string userId, int storeId)
-        {
-            return Db.Employees
-                     .Where(x => x.UserId == userId && x.ShopId == storeId)
-                     .Select(x => x.CanChangeProfile)
                      .FirstOrDefaultAsync();
         }
 

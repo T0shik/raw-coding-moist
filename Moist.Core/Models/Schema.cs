@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Moist.Core.Schemas;
+using System.Text.Json.Serialization;
+using Moist.Core.Models.Enums;
 
 namespace Moist.Core.Models
 {
@@ -9,8 +10,7 @@ namespace Moist.Core.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public bool Closed { get; set; }
-        public bool Activate { get; set; }
+        public SchemaState State { get; set; }
         public SchemaType Type { get; set; }
         public int ShopId { get; set; }
         public Shop Shop { get; set; }
@@ -19,6 +19,7 @@ namespace Moist.Core.Models
         public DateTime ValidSince { get; set; }
         public DateTime ValidUntil { get; set; }
 
+        [JsonIgnore]
         public ICollection<Code> Codes { get; }
     }
 }

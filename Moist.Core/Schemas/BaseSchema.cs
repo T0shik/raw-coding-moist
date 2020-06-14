@@ -1,5 +1,5 @@
 ﻿using Moist.Core.DateTimeInfrastructure;
-using Moist.Core.Models;
+using Moist.Core.Models.Enums;
 
 namespace Moist.Core.Schemas
 {
@@ -8,8 +8,7 @@ namespace Moist.Core.Schemas
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public bool Closed { get; set; }
-        public bool Active { get; set; }
+        public SchemaState State { get; set; }
         public abstract bool Valid(IDateTime dateTime);
         public abstract bool ReachedGoal(object progress);
     }

@@ -1,8 +1,12 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Moist.Application.Api.Controllers
 {
-    public class BaseController
+    [Authorize]
+    [ApiController]
+    public abstract class BaseController : ControllerBase
     {
         protected readonly IMediator Mediator;
 

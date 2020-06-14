@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Moist.Application;
-using Moist.Application.Services;
-using Moist.Application.Services.Shop.Commands;
+using Moist.Application.Services.ShopServices.Commands;
 using Moist.Core.Models;
 using Moq;
 using Xunit;

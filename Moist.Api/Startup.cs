@@ -1,12 +1,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Moist.Application.Services;
-using Moist.Core;
-using Moist.Database.Stores;
+using Moist.Application.Api.Infrastructure;
+using Moist.Database;
 
 namespace Moist.Application.Api
 {
@@ -29,22 +29,32 @@ namespace Moist.Application.Api
             services.AddRouting(options => options.LowercaseUrls = true);
 
             services.AddAuthentication("Bearer")
-                    .AddJwtBearer("Bearer", config =>
-                    {
-                        config.Authority = "http://192.168.1.100:8004";
-                        config.Audience = "user-api";
-                        config.RequireHttpsMetadata = false;
-                    });
+                    .AddJwtBearer("Bearer",
+                                  config =>
+                                  {
+                                      config.Authority = "http://192.168.1.104:8004";
+                                      config.Audience = "user_api";
+                                      config.RequireHttpsMetadata = false;
+                                  });
 
-            var connectionString = _config.GetConnectionString("DefaultConnection");
-            services.AddMoistDatabase(connectionString);
+            if (_env.IsDevelopment())
+                services.AddMoistDatabase(options => options.UseInMemoryDatabase("Database"));
+            else
+                services.AddMoistDatabase(
+                    options => options.UseSqlServer(_config.GetConnectionString("DefaultConnection")));
 
-            services.AddMediatR(typeof(Response).Assembly);
+
+            services.AddHttpContextAccessor();
+            services.AddMediatR(typeof(Response).Assembly)
+                    .AddScoped(typeof(IPipelineBehavior<,>), typeof(UserIdPipe<,>))
+                    .AddScoped(typeof(IPipelineBehavior<,>), typeof(ReadWritePipe<,>));
 
             services.AddControllers();
+
             if (_env.IsDevelopment())
             {
-                services.AddCors(options => options.AddPolicy(CorsAll, config =>
+                services.AddCors(options => options.AddPolicy(CorsAll,
+                                                              config =>
                                                                   config.AllowAnyHeader()
                                                                         .AllowAnyMethod()
                                                                         .AllowAnyOrigin()));

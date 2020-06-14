@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Moist.Application;
-using Moist.Application.Services;
-using Moist.Application.Services.User.Commands;
-using Moist.Core.Code;
+using Moist.Application.Services.Users.Commands;
 using Moist.Core.DateTimeInfrastructure;
 using Moist.Core.Models;
 using Moq;

@@ -1,8 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Moist.Application;
-using Moist.Application.Services;
-using Moist.Application.Services.Schema.Commands;
+using Moist.Application.Services.Schemas.Commands;
 using Moist.Core.Models;
 using Moq;
 using Xunit;

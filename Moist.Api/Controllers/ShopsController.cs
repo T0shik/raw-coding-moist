@@ -2,9 +2,8 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Moist.Application.Services.Schema.Commands;
-using Moist.Application.Services.Shop.Commands;
-using Moist.Application.Services.Shop.Queries;
+using Moist.Application.Services.ShopServices.Commands;
+using Moist.Application.Services.ShopServices.Queries;
 using Moist.Core.Models;
 
 namespace Moist.Application.Api.Controllers
@@ -15,10 +14,29 @@ namespace Moist.Application.Api.Controllers
         public ShopsController(IMediator mediator)
             : base(mediator) { }
 
+        [HttpPost]
+        public Task<Response<Shop>> CreateShopProfile([FromBody] CreateShopProfileCommand command)
+        {
+            return Mediator.Send(command);
+        }
+
         [HttpGet]
         public Task<IAsyncEnumerable<Shop>> GetShops()
         {
             return Mediator.Send(new GetShopsQuery());
+        }
+
+        [HttpGet("me")]
+        public Task<Response<Shop>> MyShopProfile()
+        {
+            return Mediator.Send(new GetProfileQuery());
+        }
+
+
+        [HttpGet("me/schemas")]
+        public Task<Response<IEnumerable<Schema>>> MyShopSchemas([FromQuery] GetShopSchemasQuery query)
+        {
+            return Mediator.Send(query);
         }
 
         [HttpGet("{id}")]
@@ -33,20 +51,16 @@ namespace Moist.Application.Api.Controllers
             return Mediator.Send(command);
         }
 
-        public Task<Shop> Index()
-        {
-            return Mediator.Send(new GetProfileQuery());
-        }
 
         [HttpPut]
-        public Task<Response> UpdateProfile(ChangeShopProfileCommand command)
+        public Task<Response<Empty>> UpdateProfile(ChangeShopProfileCommand command)
         {
             return Mediator.Send(command);
         }
 
 
         [HttpPut("{shopId}/redeem")]
-        public Task<Response> CompleteRedemption([FromBody] CompleteRedemptionCommand command)
+        public Task<Response<Empty>> CompleteRedemption([FromBody] CompleteRedemptionCommand command)
         {
             return Mediator.Send(command);
         }
@@ -58,39 +72,16 @@ namespace Moist.Application.Api.Controllers
         }
 
         [HttpPut("{shopId}/reward/{schemaId}")]
-        public Task<Response> RewardSomething([FromRoute] RewardCustomerCommand command)
+        public Task<Response<Empty>> RewardSomething([FromRoute] RewardCustomerCommand command)
         {
             return Mediator.Send(command);
         }
 
         [HttpPut("{shopId}")]
-        public Task<Response> UpdateShopProfile([FromBody] ChangeShopProfileCommand command)
+        public Task<Response<Empty>> UpdateShopProfile([FromBody] ChangeShopProfileCommand command)
         {
             return Mediator.Send(command);
         }
 
-        [HttpPost]
-        public Task<Response> InitialiseShop()
-        {
-            return Mediator.Send(new InitialiseShopCommand());
-        }
-
-        [HttpPost("{shopId}/schemas/{schemaId}")]
-        public Task<Response> ActivateShopSchema([FromRoute] CreateSchemaCommand command)
-        {
-            return Mediator.Send(command);
-        }
-
-        [HttpPut("{shopId}/schemas/{schemaId}")]
-        public Task<Response> ActivateShopSchema([FromRoute] ActivateSchemaCommand command)
-        {
-            return Mediator.Send(command);
-        }
-
-        [HttpDelete("{shopId}/schemas/{schemaId}")]
-        public Task<Response> CloseShopSchema([FromRoute] CloseSchemaCommand command)
-        {
-            return Mediator.Send(command);
-        }
     }
 }
