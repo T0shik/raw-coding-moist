@@ -229,9 +229,7 @@
       </e>
       <e p="Moist.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />
-      <e p="src" t="Include">
-        <e p="clients" t="Include" />
-      </e>
+      <e p="src" t="Include" />
       <e p="tests" t="Include" />
     </e>
   </component>
